@@ -3,6 +3,13 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# miniTopSim generated files
+*.png
+*.srf
+
+# Pycharm
+.idea
+
 # C extensions
 *.so
 
