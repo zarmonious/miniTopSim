@@ -45,13 +45,13 @@ Es kann auch sein, dass Sie `pip3` statt `pip` sagen müssen, oder dass Sie `pip
 2. Aufruf von miniTopSim
 ------------------------
 
-Rufen Sie miniTopSim immer aus "Ihrem" Arbeitsverzeichnis aus auf (`AufgabeX_xxxx`). Ab der zweiten Stunde soll der Aufruf mit
+Rufen Sie miniTopSim immer aus "Ihrem" Arbeitsverzeichnis aus auf (`Aufgabe<nn>_<name>`). Ab der zweiten Stunde soll der Aufruf mit
 
 ```bash
 python3 run.py beispiel.cfg
 ```
 
-erfolgen. In `run.py` erfolgen die Imports nach dem Muster von `work/templates/run.py`. Da für alle Aufgaben ein `run.py`-File geschrieben werden muss, wird dieses in den einzelnen Aufgabestellungen nicht extra erwähnt.
+erfolgen. In `run.py` erfolgen die Imports nach dem Muster von `work/templates/run.py`. Da für alle Aufgaben ein `run.py`-File geschrieben werden muss, wird dieses in den einzelnen Aufgabestellungen nicht extra erwähnt. **Achten Sie darauf, dass keine Files vom Programm in das Code-Directory (`mini_topsim`) geschrieben werden.**
 
 `beispiel.cfg` (kann auch anders heißen, siehe Aufgabenstellung, jedenfalls aber mit Endung `.cfg`) ist das Konfigurationsfile (cfg-File), das wie folgt aussieht:
 
@@ -89,7 +89,7 @@ Im Programm werden die Parameter über das `parameters` Modul (Datei `parameters
 from . import parameters as par
 ```
 
-importiert. Die Parameter stehen dann als Modulvariablen des parameters Moduls zur Verfügung, d.h. sie können unter den Namen `par.ParameterName*` (`ParameterName*` entsprechend dem Parameternamen ersetzen) referenziert werde. Von außerhalb des Code-Verzeichnisses, also insbesondere von Ihrem Arbeitsverzeichnis aus, lautet der Import
+importiert. Die Parameter stehen dann als Modulvariablen des `parameters` Moduls zur Verfügung, d.h. sie können unter den Namen `par.ParameterName*` (`ParameterName*` entsprechend dem Parameternamen ersetzen) referenziert werden. Von außerhalb des Code-Verzeichnisses, also insbesondere von Ihrem Arbeitsverzeichnis aus, lautet der Import
 
 ```
 import mini_topsim.parameters as par
@@ -99,11 +99,11 @@ import mini_topsim.parameters as par
 3. Testen
 ---------
 
-Ab der zweiten Stunde sind in den Aufgaben automatisierte Tests durchzuführen. Hierfür verwenden wir Pytest. Nachdem Sie Test-Code geschrieben haben, rufen Sie `pytest` (manchmal auch `pytest3` oder `pytest-3`) in Ihrem Arbeitsverzeichnis auf, dann werden Ihre Tests ausgeführt. Wollen Sie die Tests der anderen Aufgaben auch ausführen (das sollten Sie zumindest tun, bevor Sie mit Ihrer Aufgabe beginnen und bevor Sie diese abgeben), dann starten Sie `pytest` aus `work`. Für das Importieren von Modulen gilt dasselbe wie für das `run.py` Skript.
+Ab der zweiten Stunde sind in den Aufgaben automatisierte Tests durchzuführen. Hierfür verwenden wir Pytest. Nachdem Sie Test-Code geschrieben haben, rufen Sie `pytest` (manchmal auch `pytest3` oder `pytest-3`) in Ihrem Arbeitsverzeichnis auf, dann werden Ihre Tests ausgeführt. Wollen Sie die Tests der anderen Aufgaben auch ausführen (das sollten Sie zumindest tun, bevor Sie mit Ihrer Aufgabe beginnen und bevor Sie diese abgeben), dann starten Sie `pytest` aus `miniTopSim/work/`. Für das Importieren von Modulen gilt dasselbe wie für das `run.py` Skript.
 
 Tests müssen ein assert Statement enthalten (siehe Vortragsfolien)!
 
-Wenn nichts anderes angegeben ist, besteht ein Test aus einer Simulation, die ein `srf`-File erzeugt. Die letzte Oberfläche soll auf "geringen Abstand" von der letzten Oberfläche des entsprechenden `srf_save`-Files überprüft werden. Letzteres wird durch Kopieren des `srf`-Files einer vorangegangenen Simulation auf ein File mit Endung `.srf_save` erzeugt. Die in den Angaben verlangten Tests stellen ein Minimum dar. Sie können auch weitere Tests definieren. Achten Sie aber darauf, dass diese möglichst nicht zu lange laufen.
+Ab Aufgabe 6 und wenn nichts anderes angegeben ist, besteht ein Test aus einer Simulation, die ein `srf`-File erzeugt. Die letzte Oberfläche soll auf "geringen Abstand" von der letzten Oberfläche des entsprechenden `srf_save`-Files überprüft werden. Letzteres wird durch Kopieren des `srf`-Files einer vorangegangenen Simulation auf ein File mit Endung `.srf_save` erzeugt. Die in den Angaben verlangten Tests stellen ein Minimum dar. Es ist meist sinnvoll, weitere Tests zu definieren. Achten Sie aber darauf, dass diese möglichst nicht zu lange laufen.
 
 -------------------
 4. Arbeiten mit git
@@ -122,7 +122,7 @@ Wenn nichts anderes angegeben ist, besteht ein Test aus einer Simulation, die ei
 5. Hinweise zur Präsentation
 ----------------------------
 
-Sie sollen Ihre Arbeit in einem ca. 10-15-minütigen Vortrag präsentieren. Halten Sie den Vortrag in erster Linie für Ihre Kollegen und berücksichtigen Sie deren Wissensstand. Ihr Vortrag soll die Aufgabenstellung darlegen, den Code präsentieren und die Ergebnisse der Tests und/oder Simulationen beschreiben. Sie können dazu mehrere Hilfsmittel verwenden, Powerpoint-Präsentation, Spyder/PyCharm/Editor. Kurze Rechnungen können Sie online laufen lassen, bei längeren wird es angebracht sein, die Ergebnisse vorzubereiten.
+Sie sollen Ihre Arbeit in einem ca. 10-15-minütigen Vortrag präsentieren. Halten Sie den Vortrag in erster Linie für Ihre Kollegen und berücksichtigen Sie deren Wissensstand. Ihr Vortrag soll die Aufgabenstellung darlegen, den Code präsentieren und die Ergebnisse der Tests und/oder Simulationen beschreiben. Sie können dazu mehrere Hilfsmittel verwenden, in der Regel Powerpoint-Präsentation und/oder Spyder/PyCharm/Editor. Kurze Rechnungen können Sie online laufen lassen, bei längeren wird es angebracht sein, die Ergebnisse vorzubereiten.
 
 Damit Ihr Code "präsentierbar" ist, schreiben Sie möglichst übersichtlichen Code und beachten Sie den "Style Guide for Python Code" (http://www.python.org/dev/peps/pep-0008/) und die "Docstring Conventions" (http://www.python.org/dev/peps/pep-0257/).
 
