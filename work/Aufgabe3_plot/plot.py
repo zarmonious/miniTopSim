@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
+
 class SurfacePlotter:
 
     def __init__(self, filename):
@@ -11,6 +12,16 @@ class SurfacePlotter:
         self.yPointsList = list()
         self.timeList = list()
         self.nPointList = list()
+        self.currentSurface = 0;
+        self.forwardDirectory = True;
+        self.length = 0
+        self.aspectRatioAuto = True;
+        plt.rcParams['keymap.fullscreen'] = ['ctrl+f']
+        plt.rcParams['keymap.yscale'] = ['ctrl+l']
+        plt.rcParams['keymap.home'] = ['h','home']
+        plt.rcParams['keymap.all_axes'] = ''
+        plt.rcParams['keymap.save'] = ['ctrl+s']
+        plt.rcParams['keymap.quit'] = ['ctrl+w','cmd+w']
 
     def read_srf_file(self):
         try:
@@ -45,14 +56,80 @@ class SurfacePlotter:
                 xPoints[j] = float(stringArray[0])
                 yPoints[j] = float(stringArray[1])
                 j=j+1
-        
+        self.length = i
         file.close()
 
         return True
 
 
     def on_key_press(self, event):
-        print('you pressed', event.key)
+
+        if(event.key == 'l'):
+            plt.clf()
+            lastElementIndex = self.length - 1
+            self.currentSurface = lastElementIndex
+            plt.plot(self.xPointsList[lastElementIndex], self.yPointsList[lastElementIndex])
+            plt.title('Time = ' + str(self.timeList[lastElementIndex]) + 's')
+            event.canvas.draw()
+
+
+        elif(event.key == 'f'):
+            plt.clf()
+            self.currentSurface = 0
+            plt.plot(self.xPointsList[0], self.yPointsList[0])
+            plt.title('Time = ' + str(self.timeList[0]) + 's')
+            event.canvas.draw()
+        
+
+        elif(event.key == ' '):
+            if(self.forwardDirectory == True):
+                self.currentSurface = self.currentSurface + 1
+                if(self.currentSurface == self.length):
+                    self.currentSurface = 0
+
+            else:
+                self.currentSurface = self.currentSurface -1
+                if(self.currentSurface == -1):
+                    self.currentSurface == self.length -1
+            plt.clf()
+            plt.plot(self.xPointsList[self.currentSurface], self.yPointsList[self.currentSurface])
+            plt.title('Time = ' + str(self.timeList[self.currentSurface]) + 's')
+            event.canvas.draw()
+
+
+        elif(event.key == 'r'):
+            self.forwardDirectory = not self.forwardDirectory
+
+        #WIP
+        elif(event.key == 'a'):
+            #plt.axes().set_aspect('auto', 'box')
+            return 
+        
+        elif(event.key == 'd'):
+            return
+
+        
+        elif(event.key == 's'):
+            return
+        
+        elif(event.key == 'b'):
+            return
+
+        
+        elif(event.key == 'q'):
+            return
+        
+        elif(event.key.isnumeric() == True):
+            return
+
+        else:
+            return  None
+
+
+
+
+
+        
         return None
 
     def plot_interactive(self):
@@ -68,7 +145,7 @@ class SurfacePlotter:
     # will get removed when rest of project completed   
     def plot_all_srf(self):
         self.read_srf_file()
-        for x in range(len(self.xPointsList)):
+        for x in range(self.length):
             plt.figure(x)
             plt.title('Time = ' + str(self.timeList[x]) + 's')
             plt.plot(self.xPointsList[x],self.yPointsList[x])
@@ -79,13 +156,12 @@ class SurfacePlotter:
 
 def plot(filename):
     plotter = SurfacePlotter(filename)
-    plotter.plot_all_srf()
+    plotter.plot_interactive()
 
 
 #add sys.argv
 if __name__ == '__main__':
     plot('trench.srf_save')
-
 
 
 #%%
