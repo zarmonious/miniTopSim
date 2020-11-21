@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-
 class SurfacePlotter:
 
     def __init__(self, filename):
@@ -12,10 +11,12 @@ class SurfacePlotter:
         self.yPointsList = list()
         self.timeList = list()
         self.nPointList = list()
-        self.currentSurface = 0;
-        self.forwardDirectory = True;
+        self.currentSurface = 0
+        self.forwardDirectory = True
         self.length = 0
-        self.aspectRatioAuto = True;
+        self.aspectRatioAuto = True
+        self.deletePlotMode = True
+        self.stepSize = 1
         plt.rcParams['keymap.fullscreen'] = ['ctrl+f']
         plt.rcParams['keymap.yscale'] = ['ctrl+l']
         plt.rcParams['keymap.home'] = ['h','home']
@@ -63,9 +64,10 @@ class SurfacePlotter:
 
 
     def on_key_press(self, event):
-
+        
         if(event.key == 'l'):
-            plt.clf()
+            if(self.deletePlotMode == True):
+                plt.clf()
             lastElementIndex = self.length - 1
             self.currentSurface = lastElementIndex
             plt.plot(self.xPointsList[lastElementIndex], self.yPointsList[lastElementIndex])
@@ -74,7 +76,8 @@ class SurfacePlotter:
 
 
         elif(event.key == 'f'):
-            plt.clf()
+            if(self.deletePlotMode == True):
+                plt.clf()
             self.currentSurface = 0
             plt.plot(self.xPointsList[0], self.yPointsList[0])
             plt.title('Time = ' + str(self.timeList[0]) + 's')
@@ -83,15 +86,18 @@ class SurfacePlotter:
 
         elif(event.key == ' '):
             if(self.forwardDirectory == True):
-                self.currentSurface = self.currentSurface + 1
-                if(self.currentSurface == self.length):
+                self.currentSurface = self.currentSurface + self.stepSize
+                if(self.currentSurface >= self.length):
                     self.currentSurface = 0
 
             else:
-                self.currentSurface = self.currentSurface -1
-                if(self.currentSurface == -1):
+                self.currentSurface = self.currentSurface - self.stepSize
+                if(self.currentSurface <= -1):
                     self.currentSurface == self.length -1
-            plt.clf()
+
+            if(self.deletePlotMode == True):
+                plt.clf()
+
             plt.plot(self.xPointsList[self.currentSurface], self.yPointsList[self.currentSurface])
             plt.title('Time = ' + str(self.timeList[self.currentSurface]) + 's')
             event.canvas.draw()
@@ -100,35 +106,35 @@ class SurfacePlotter:
         elif(event.key == 'r'):
             self.forwardDirectory = not self.forwardDirectory
 
-        #WIP
         elif(event.key == 'a'):
-            #plt.axes().set_aspect('auto', 'box')
+            ax = plt.gca()
+            ax.set_aspect(aspect = 5)
+            event.canvas.draw()
             return 
         
         elif(event.key == 'd'):
-            return
+            self.deletePlotMode = not self.deletePlotMode
 
         
         elif(event.key == 's'):
-            return
+            fname = self.filename.split('.')
+            fname = fname[0] + '.png'
+            plt.savefig(fname)
         
+
         elif(event.key == 'b'):
+            plt.ylim(top = 0, bottom = -100)
+            event.canvas.draw()
             return
 
         
         elif(event.key == 'q'):
-            return
+            plt.close('all')
         
         elif(event.key.isnumeric() == True):
-            return
+            self.stepSize = 2 ** int(event.key)
 
-        else:
-            return  None
-
-
-
-
-
+        
         
         return None
 
