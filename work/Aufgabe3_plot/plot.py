@@ -17,6 +17,7 @@ class SurfacePlotter:
         self.aspectRatioAuto = True
         self.deletePlotMode = True
         self.stepSize = 1
+        self.boundaryModeAuto = True
         plt.rcParams['keymap.fullscreen'] = ['ctrl+f']
         plt.rcParams['keymap.yscale'] = ['ctrl+l']
         plt.rcParams['keymap.home'] = ['h','home']
@@ -64,26 +65,13 @@ class SurfacePlotter:
 
 
     def on_key_press(self, event):
-        
         if(event.key == 'l'):
-            if(self.deletePlotMode == True):
-                plt.clf()
             lastElementIndex = self.length - 1
             self.currentSurface = lastElementIndex
-            plt.plot(self.xPointsList[lastElementIndex], self.yPointsList[lastElementIndex])
-            plt.title('Time = ' + str(self.timeList[lastElementIndex]) + 's')
-            event.canvas.draw()
-
 
         elif(event.key == 'f'):
-            if(self.deletePlotMode == True):
-                plt.clf()
             self.currentSurface = 0
-            plt.plot(self.xPointsList[0], self.yPointsList[0])
-            plt.title('Time = ' + str(self.timeList[0]) + 's')
-            event.canvas.draw()
         
-
         elif(event.key == ' '):
             if(self.forwardDirectory == True):
                 self.currentSurface = self.currentSurface + self.stepSize
@@ -93,50 +81,55 @@ class SurfacePlotter:
             else:
                 self.currentSurface = self.currentSurface - self.stepSize
                 if(self.currentSurface <= -1):
-                    self.currentSurface == self.length -1
-
-            if(self.deletePlotMode == True):
-                plt.clf()
-
-            plt.plot(self.xPointsList[self.currentSurface], self.yPointsList[self.currentSurface])
-            plt.title('Time = ' + str(self.timeList[self.currentSurface]) + 's')
-            event.canvas.draw()
-
+                    self.currentSurface = self.length - 1
 
         elif(event.key == 'r'):
             self.forwardDirectory = not self.forwardDirectory
+            return
 
         elif(event.key == 'a'):
-            ax = plt.gca()
-            ax.set_aspect(aspect = 5)
-            event.canvas.draw()
-            return 
+            self.aspectRatioAuto = not self.aspectRatioAuto
         
         elif(event.key == 'd'):
             self.deletePlotMode = not self.deletePlotMode
-
+            return
         
         elif(event.key == 's'):
             fname = self.filename.split('.')
             fname = fname[0] + '.png'
             plt.savefig(fname)
+            return
         
 
         elif(event.key == 'b'):
-            plt.ylim(top = 0, bottom = -100)
-            event.canvas.draw()
-            return
+            self.boundaryModeAuto = not self.boundaryModeAuto
 
         
         elif(event.key == 'q'):
             plt.close('all')
+            return 
         
         elif(event.key.isnumeric() == True):
             self.stepSize = 2 ** int(event.key)
+            return
 
-        
-        
+        self.update_plot()
         return None
+
+
+    def update_plot(self):
+        if(self.deletePlotMode == True):
+            plt.clf()
+        plt.plot(self.xPointsList[self.currentSurface], self.yPointsList[self.currentSurface])
+        plt.title('Time = ' + str(self.timeList[self.currentSurface]) + 's')
+        if(self.boundaryModeAuto != True):
+            plt.ylim(top = 0, bottom = -100)
+        if(self.aspectRatioAuto != True):
+            ax = plt.gca()
+            ax.set_aspect(aspect = 1)
+        plt.draw()
+
+        return 
 
     def plot_interactive(self):
         self.read_srf_file()
@@ -145,19 +138,6 @@ class SurfacePlotter:
         plt.title('Time = ' + str(self.timeList[0]) + 's')
         plt.plot(self.xPointsList[0], self.yPointsList[0])
         plt.show()
-
-        
-    #Only for Debugging purposes, 
-    # will get removed when rest of project completed   
-    def plot_all_srf(self):
-        self.read_srf_file()
-        for x in range(self.length):
-            plt.figure(x)
-            plt.title('Time = ' + str(self.timeList[x]) + 's')
-            plt.plot(self.xPointsList[x],self.yPointsList[x])
-            #plt.show()
-        return None
-
     
 
 def plot(filename):
