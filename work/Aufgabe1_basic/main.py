@@ -24,6 +24,7 @@ def simulation(tend, dt):
         s.write(time, filename)
         advance(s, timestep(dt, time, tend))
         time += timestep(dt, time, tend)
+    s.write(time, filename)
     s.plot(time)
     plt.legend()
     plt.show()
