@@ -70,6 +70,7 @@ class _SurfacePlotter:
         self.stepSize = 1
         self.boundaryModeAuto = True
         self.yLim = 0
+        self.alreadyPlottedList = None
         plt.rcParams['keymap.fullscreen'] = ['ctrl+f']
         plt.rcParams['keymap.yscale'] = ['ctrl+l']
         plt.rcParams['keymap.home'] = ['h','home']
@@ -103,7 +104,7 @@ class _SurfacePlotter:
                     yPoints[j] = float(stringArray[1])
                     j=j+1
             self.length = i
-
+            self.alreadyPlottedList = [False] * self.length
 
     def on_key_press(self, event):
         if(event.key == 'l'):
@@ -162,8 +163,15 @@ class _SurfacePlotter:
     def update_plot(self):
         if(self.deletePlotMode == True):
             plt.clf()
-        plt.plot(self.xPointsList[self.surfaceIndex], self.yPointsList[self.surfaceIndex], 
+            for i in range(self.length):
+                self.alreadyPlottedList[i] = False
+            
+
+        if(self.alreadyPlottedList[self.surfaceIndex] == False):
+            plt.plot(self.xPointsList[self.surfaceIndex], self.yPointsList[self.surfaceIndex], 
                 label = 't = ' + str(self.timeList[self.surfaceIndex]) + 's')
+            self.alreadyPlottedList[self.surfaceIndex] = True
+
         if(self.boundaryModeAuto != True):
             plt.ylim(self.ylim)
         if(self.aspectRatioAuto != True):
