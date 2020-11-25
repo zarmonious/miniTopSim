@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 '''
 Functions for creating an interactive plot of 2D-surfaces with the data of a .srf file.
 
@@ -63,7 +64,7 @@ import matplotlib.pyplot as plt
 #       'plt.rcParams['keymap.all_axes'] =''
 #import warnings
 #import matplotlib.cbook
-# warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
+#warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
 #
 
 
@@ -92,7 +93,8 @@ class _SurfacePlotter:
         deletePlotMode(bool): For toggling between showing all surfaces or only the current one
         stepsize(int): Size of step when switching between surfaces
         boundaryModeAuto(bool): For toggling between fixed and automatic y-boundaries
-        yLim(float): Bottom and Top y-limit of the plot.
+        yLim(Tuple of two floats): Bottom and Top y-limit of the plot.
+        xLim(Tuple of two floats): Left and right x-limit of the plot.
 
     Raises:
         FileNotFoundError: if file is not found
@@ -118,7 +120,8 @@ class _SurfacePlotter:
         self.deletePlotMode = True
         self.stepSize = 1
         self.boundaryModeAuto = True
-        self.yLim = 0
+        self.yLim = None
+        self.xLim = None
         plt.rcParams['keymap.fullscreen'] = ['ctrl+f']
         plt.rcParams['keymap.yscale'] = ['ctrl+l']
         plt.rcParams['keymap.home'] = ['h', 'home']
@@ -204,14 +207,15 @@ class _SurfacePlotter:
         elif(event.key == 's'):
             fname = self.filename.split('.')
             fname = fname[0] + '.png'
-            plt.savefig(fname)
+            plt.savefig(fname, dpi = 420)
             return
 
         elif(event.key == 'b'):
             self.boundaryModeAuto = not self.boundaryModeAuto
             if(self.boundaryModeAuto == False):
                 ax = plt.gca()
-                self.ylim = ax.get_ylim()
+                self.yLim = ax.get_ylim()
+                self.xLim = ax.get_xlim() 
 
         elif(event.key == 'q'):
             plt.close('all')
@@ -244,11 +248,18 @@ class _SurfacePlotter:
             self.alreadyPlottedList[self.surfaceIndex] = True
 
         if(self.boundaryModeAuto != True):
-            plt.ylim(self.ylim)
-
-        if(self.aspectRatioAuto != True):
+            plt.ylim(self.yLim)
+            plt.xlim(self.xLim)
+        else:
             ax = plt.gca()
+            ax.relim()
+            ax.autoscale(True, 'both', False)
+
+        ax = plt.gca()
+        if(self.aspectRatioAuto != True):
             ax.set_aspect(aspect=1)
+        else:
+            ax.set_aspect(aspect = 'auto')
 
         plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
         plt.xlabel('x in nm')
@@ -308,6 +319,12 @@ def plot(filename):
 
     Args:
         filename(str): Name of the \'.srf\' file.
+
+    Raises:
+        FileNotFoundError: if file is not found
+        WrongFileExtensionError: if passed file doesn't have the correct file extension
+        IndexError: if file is not formatted correctly
+        ValueError: if file is not formatted correctly
     '''
     plotter = _SurfacePlotter(filename)
     plotter.plot_interactive()
