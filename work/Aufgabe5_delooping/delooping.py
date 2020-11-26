@@ -5,6 +5,9 @@ This should be a standalone file
 
 import numpy as np
 import matplotlib.pyplot as plt
+import time
+import TestingSurfaces
+
 
 def deloop2(p):
     """Hier wird versucht das ganze als whole array operationen zu machen"""
@@ -46,7 +49,7 @@ def deloop2(p):
 def intersectionPoint(workingpoint, workingpointplusone, erg):
 
     newpoint = workingpoint + (workingpointplusone - workingpoint) * erg[0]
-    print(newpoint)
+    print('This is the new Point inserted: {}'.format(newpoint))
     return newpoint
 
 def removelooppoints(p, start, end):
@@ -57,6 +60,7 @@ def removelooppoints(p, start, end):
 
 def insertIntersectionPoint(deloopedsurface, newpoint, place):
 
+    print('This is the new delooped surface:')
     print(deloopedsurface)
     print(place)
     newsurface = np.insert(deloopedsurface, place, newpoint, axis=0)
@@ -84,20 +88,30 @@ def deloop(p):
                     if 0 < erg[0] < 1 and 0 < erg[1] < 1:
                         """Du hast eine Intersection gefunden! Entferne Sie doch bitte"""
                         newpoint = intersectionPoint(workingpoint, workingpointplusone, erg)
+                        print('These are the 2 sections:')
+                        print(p[i, :])
+                        print(p[j, :])
                         print('This is the old surface:')
                         print(p)
                         deloopedsurface = removelooppoints(p, i, j)
-                        print('This is the new delooped surface:')
-                        print(deloopedsurface)
+
 
                         p = insertIntersectionPoint(deloopedsurface, newpoint, i+1)
                         print('This is the new surface!!')
                         print(p)
-                        continue
-                        #removeIntersection(workingpoint, workingpointplusone, movingpoint, movingpointplusone, erg)
-
                         print('Kreuzung')
                         print('Ergebnis = {}'.format(erg))
+                        #plt.plot(p[:, 0], p[:, 1], 'b+-', label='Surfacepoints')
+                        #plt.show()
+                        print('This is before the continue:')
+                        print(p)
+                        print('i = {}'.format(i))
+                        print('j = {}'.format(j))
+
+                        return p
+                        #removeIntersection(workingpoint, workingpointplusone, movingpoint, movingpointplusone, erg)
+
+
 
                     #print(erg[0])
                     #print(erg[1])
@@ -113,7 +127,10 @@ def deloop(p):
         #np.linalg.solve(np.transpose(np.array([p[1, :] - p[0, :], -p[2, :] + p[1, :]])), (np.array(p[1, :] - p[0, :])))
 
         print('xxxxxxxxxxxxxx')
+    global deloopagain
+    deloopagain = False
     return p
+
 
 
 """ In zweidimensionalen Numpy Arrays werden die Punkte gespeichert
@@ -123,38 +140,48 @@ x2 y2
 x3 y3
 """
 
-x = np.array((0.0, 1.0, 2.0, 1.0, 2.3, 5.0, 6.0))
-y = np.array((5.0, 5.5, 5.3, 4.0, 6.5, 5.0, 6.0))
+#x = np.array((0.0, 1.0, 2.0, 1.0, 2.3, 5.0, 6.0))
+#y = np.array((5.0, 5.5, 5.3, 4.0, 6.5, 5.0, 6.0))
 
-p = np.transpose(np.concatenate((x, y)).reshape((2, 7)))
+#p = np.transpose(np.concatenate((x, y)).reshape((2, 7)))
+
+#p1 = np.random.rand(7, 2)
+surface = TestingSurfaces.p2
+surfaceold = TestingSurfaces.p2
+
+plt.plot(surface[:, 0], surface[:, 1], 'b+-', label='Surfacepoints')
+plt.show()
 print('Starting deloop')
+deloopagain = True
 #deloop2(p)
-deloopedsurface = deloop(p)
+start_time = time.time()
+while deloopagain:
+    surface = deloop(surface)
+print("--- %s seconds ---" % (time.time() - start_time))
 print('Stopping deloop')
-print(p)
 print('..............')
-print(np.array([p[1, :] - p[0, :], -p[2, :] + p[1, :]]))
+#print(np.array([p[1, :] - p[0, :], -p[2, :] + p[1, :]]))
 print('Eval Line')
-print(np.transpose(np.array([p[1, :] - p[0, :], -p[2, :] + p[1, :]])))
-ergebnis = np.linalg.solve(np.transpose(np.array([p[1, :] - p[0, :], -p[2, :] + p[1, :]])), (np.array(p[1, :] - p[0, :])))
-ergebnis2 = np.linalg.solve(np.transpose(np.array([p[2, :] - p[1, :], -p[4, :] + p[3, :]])), (np.array(p[3, :] - p[1, :])))
+#print(np.transpose(np.array([p[1, :] - p[0, :], -p[2, :] + p[1, :]])))
+#ergebnis = np.linalg.solve(np.transpose(np.array([p[1, :] - p[0, :], -p[2, :] + p[1, :]])), (np.array(p[1, :] - p[0, :])))
+#ergebnis2 = np.linalg.solve(np.transpose(np.array([p[2, :] - p[1, :], -p[4, :] + p[3, :]])), (np.array(p[3, :] - p[1, :])))
 
 print('Matrix A:')
-print(np.transpose(np.array([p[1, :] - p[0, :], -p[2, :] - p[1, :]])))
+#print(np.transpose(np.array([p[1, :] - p[0, :], -p[2, :] - p[1, :]])))
 print('Matrix b:')
-print((np.array(p[:, 1] - p[:, 0])))
+#print((np.array(p[:, 1] - p[:, 0])))
 print('---------')
 
-print(ergebnis)
-print(ergebnis2)
+#print(ergebnis)
+#print(ergebnis2)
 print('---------')
 
 
-print('Delooped Surface = {}'.format(deloopedsurface))
-print(deloopedsurface[0, :])
+print('Delooped Surface = {}'.format(surface))
+print(surface[0, :])
 
 
 
-plt.plot(x, y, 'b+-', label='Surfacepoints')
-plt.plot(deloopedsurface[:, 0], deloopedsurface[:, 1], 'k*-', label='Delooped Surface')
+plt.plot(surfaceold[:, 0], surfaceold[:, 1], 'b+-', label='Surfacepoints')
+plt.plot(surface[:, 0], surface[:, 1], 'k*-', label='Delooped Surface')
 plt.show()

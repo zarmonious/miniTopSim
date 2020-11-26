@@ -24,3 +24,9 @@ print(p)
 #    print('XXXXXXXXXXXXXXXXXXXXXX')
 print('Size of p = {}'.format(np.size(p)/2))
 
+
+testbool = True
+print(testbool)
+testbool = False
+print(testbool)
+
