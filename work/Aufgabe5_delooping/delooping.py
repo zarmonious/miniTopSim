@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def deloop2(p):
+    """Hier wird versucht das ganze als whole array operationen zu machen"""
     pplusone = np.roll(p, -1, axis=0)
     pmove = p
     pmoveplusone = np.roll(pmove, -1, axis=0)
@@ -42,6 +43,25 @@ def deloop2(p):
     print(erg)
     return None
 
+def intersectionPoint(workingpoint, workingpointplusone, erg):
+
+    newpoint = workingpoint + (workingpointplusone - workingpoint) * erg[0]
+    print(newpoint)
+    return newpoint
+
+def removelooppoints(p, start, end):
+    print('i = {}, j = {}'.format(start, end))
+    intervall = np.arange(start+1, end+1)
+    p = np.delete(p, intervall, axis=0)
+    return p
+
+def insertIntersectionPoint(deloopedsurface, newpoint, place):
+
+    print(deloopedsurface)
+    print(place)
+    newsurface = np.insert(deloopedsurface, place, newpoint, axis=0)
+    print(newsurface)
+    return newsurface
 
 def deloop(p):
     """Nimm zuerst die ersten beiden Punkte und dieser Streckenabschnitt wird mit den anderen auf einen Schnittpunkt
@@ -49,27 +69,33 @@ def deloop(p):
 
 
     for i, workingpoint in enumerate(p):
-        if i < 7:
+        if i < np.size(p)/2-1:
             workingpointplusone = p[i + 1, :]
             for j, movingpoint in enumerate(p):
                 if i == j:
                     continue
-                if j < 7:
+                if j < np.size(p)/2-1:
                     movingpointplusone = p[j + 1]
-                    #print('i:{} und j:{}',format((i, j)))
-                    #print(workingpoint)
-                    #print(workingpointplusone)
-                    #print(movingpoint)
-                    #print(movingpointplusone)
-                    #print(np.array([workingpointplusone - workingpoint, -movingpointplusone + movingpoint]))
-                    #print(np.transpose(np.array([workingpointplusone - workingpoint, -movingpointplusone + movingpoint])))
-                    #print(np.array(movingpoint-workingpoint))
                     a = np.transpose(np.array([workingpointplusone - workingpoint, -movingpointplusone + movingpoint]))
                     b = (np.array(movingpoint - workingpoint))
                     #print('a = {}'.format(a))
                     #print('b = {}'.format(b))
                     erg = np.linalg.solve(a, np.transpose(b))
                     if 0 < erg[0] < 1 and 0 < erg[1] < 1:
+                        """Du hast eine Intersection gefunden! Entferne Sie doch bitte"""
+                        newpoint = intersectionPoint(workingpoint, workingpointplusone, erg)
+                        print('This is the old surface:')
+                        print(p)
+                        deloopedsurface = removelooppoints(p, i, j)
+                        print('This is the new delooped surface:')
+                        print(deloopedsurface)
+
+                        p = insertIntersectionPoint(deloopedsurface, newpoint, i+1)
+                        print('This is the new surface!!')
+                        print(p)
+                        continue
+                        #removeIntersection(workingpoint, workingpointplusone, movingpoint, movingpointplusone, erg)
+
                         print('Kreuzung')
                         print('Ergebnis = {}'.format(erg))
 
@@ -85,7 +111,9 @@ def deloop(p):
 
         #np.linalg.solve(np.transpose(np.array(workingpointplusone - workingpoint, - )))
         #np.linalg.solve(np.transpose(np.array([p[1, :] - p[0, :], -p[2, :] + p[1, :]])), (np.array(p[1, :] - p[0, :])))
+
         print('xxxxxxxxxxxxxx')
+    return p
 
 
 """ In zweidimensionalen Numpy Arrays werden die Punkte gespeichert
@@ -99,11 +127,11 @@ x = np.array((0.0, 1.0, 2.0, 1.0, 2.3, 5.0, 6.0))
 y = np.array((5.0, 5.5, 5.3, 4.0, 6.5, 5.0, 6.0))
 
 p = np.transpose(np.concatenate((x, y)).reshape((2, 7)))
-
 print('Starting deloop')
-deloop2(p)
-#deloop(p)
+#deloop2(p)
+deloopedsurface = deloop(p)
 print('Stopping deloop')
+print(p)
 print('..............')
 print(np.array([p[1, :] - p[0, :], -p[2, :] + p[1, :]]))
 print('Eval Line')
@@ -122,9 +150,11 @@ print(ergebnis2)
 print('---------')
 
 
-
+print('Delooped Surface = {}'.format(deloopedsurface))
+print(deloopedsurface[0, :])
 
 
 
 plt.plot(x, y, 'b+-', label='Surfacepoints')
+plt.plot(deloopedsurface[:, 0], deloopedsurface[:, 1], 'k*-', label='Delooped Surface')
 plt.show()
