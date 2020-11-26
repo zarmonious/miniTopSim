@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 '''
-Functions for creating an interactive plot of 2D-surfaces with the data of a .srf file.
+Functions for creating an interactive plot of 2D-surfaces with the data read from a .srf file.
 
 This module offers functionality to create an interactive matplotlib-plot of 2D-surfaces with the
-data from a .srf file. To create a plot you have to invoke the \'plot(filename)\' function. 
+data read from a .srf file. To create a plot you have to invoke the \'plot(filename)\' function. 
 Internally a private class is used to handle the plotting.
 
 Keybindings:
@@ -14,7 +14,7 @@ Keybindings:
     [r]: reverse direction of movement 
     [a]: toggle between automatic and 1:1 aspect ratio
     [d]: toggle between showing all previous surfaces or only showing the current surface
-    [s]: saves plot as \'.png\' in cwd. The file will have the same name as the \'.srf\' file
+    [s]: saves plot as \'.png\' in cwd. The file will have the same filename as the \'.srf\' file
     [b]: switch between automatic and fixed y-boundaries
     [q]: quit the plot
 
@@ -87,12 +87,12 @@ class _SurfacePlotter:
         nPointsList(list): Contains the number of points from all surfaces.
         alreadyPlottedList(list): Contains information if a specific surface has already been plotted
         surfaceIndex(int): Used for indexing the lists mentioned above. Points on the current surface
-        forwardDirectory(bool): For toggling between forward and backwards moving.
+        forwardDirectory(bool): For toggling between moving forward/backwards.
         length(int): Length of the lists mentioned above.
         aspectRatioAuto(bool): For toggling between automatic and 1:1 aspect-ratio
         deletePlotMode(bool): For toggling between showing all surfaces or only the current one
         stepsize(int): Size of step when switching between surfaces
-        boundaryModeAuto(bool): For toggling between fixed and automatic y-boundaries
+        boundaryModeAuto(bool): For toggling between fixed and automatic x/y-boundaries
         yLim(Tuple of two floats): Bottom and Top y-limit of the plot.
         xLim(Tuple of two floats): Left and right x-limit of the plot.
 
@@ -342,4 +342,4 @@ if __name__ == '__main__':
         plot(sys.argv[1])
     else:
         print('plot.py: no file specified! Using default file.')
-        plot('trench.srf_save')
+        plot('work/Aufgabe3_plot/trench.srf_save')
