@@ -8,10 +8,10 @@ function timestep: calculates the timestep for a given time
 
 
 import numpy as np
-import mini_topsim.surface 
+from surface import Surface
 
 
-def advance(surface, dtime):
+def advance(surface: Surface, dtime):
     """
     calculates the movement of the surface fpr a timestep dtime
 
@@ -19,10 +19,10 @@ def advance(surface, dtime):
     :param dtime: timstep of the calculation
     """
     v = 1.
-    nx, ny = surface.normal_vector()
+    nX, nY = surface.normal_vector()
 
-    surface.xvals += nx*dtime*v
-    surface.yvals += ny*dtime*v
+    surface.xVals += nX*dtime*v
+    surface.yVals += nY*dtime*v
 
 
 def timestep(dtime, time, end_time):

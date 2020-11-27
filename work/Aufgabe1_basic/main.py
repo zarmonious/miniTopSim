@@ -16,12 +16,26 @@ from advance import timestep
 
 def mini_topsim():
     """
-    Reads the Simulation parameters, starts the sim, plots and writes to file
+    Reads the Simulation parameter from the system arguments ands starts the simulation
 
     the first sys.argv[1] is the simulation time 
     the second sys.argv[2] is the timestep
+    if no sys arguments are passed the simulation starts with tend = 10 and dt = 1
+    """
 
-    if no sys arguments are passed the simulation starts with tend=10 and dt=1
+    if len(sys.argv) > 1:
+        tend = float(sys.argv[1])
+        dt = float(sys.argv[2])
+    else:
+        tend = 10
+        dt = 1
+    simulation(tend, dt)
+
+
+def simulation(tend, dt):
+    """
+    starts the simulation, plots and writes the data
+
     creates a Surface Object and starts the simulation. 
     the correct timestep is calculated with the timestep function 
     from the advance module. 
@@ -29,29 +43,21 @@ def mini_topsim():
     filenname: basic_<tend>_<dt>.srf
     plots the simulation fpr t = 0 and t = tend
 
+    :param tend: endtime of the simulation
+    :param dt: timestep of the simulation
     """
-    print('Running miniTopSim ...')
-
-    if len(sys.argv) > 1:
-        tend = int(sys.argv[1])
-        dt = int(sys.argv[2])
-    else:
-        tend = 10
-        dt = 1
-
-    surface = Surface()
+    s = Surface()
     time = 0
     filename = f"basic_{tend}_{dt}.srf"
-    surface.plot(time)
+    s.plot(time)
 
     while time < tend:
-        surface.write(time, filename)
-        dtime = timestep(dt, time, tend)
-        advance(surface, dtime)
-        time += dtime
+        s.write(time, filename)
+        advance(s, timestep(dt, time, tend))
+        time += timestep(dt, time, tend)
 
-    surface.write(time, filename)
-    surface.plot(time)
+    s.write(time, filename)
+    s.plot(time)
     plt.legend()
     plt.show()
 
