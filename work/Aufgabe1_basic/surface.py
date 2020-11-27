@@ -2,15 +2,14 @@
 Defines the class Surface
 
 includes function 
-"normal_vector" calculates the normal vectors in every point of the surface
+"normal_vector" which calculates the normal vectors in every point of the surface
 "plot" which plots the surface
 "write" which writes the surface points into a .srf file
 """
 import numpy as np
-import init_surface as init
+import init_surface
 import matplotlib.pyplot as plt
 
-import parameters as par
 
 class Surface:
 
@@ -18,8 +17,8 @@ class Surface:
         """
         Initializes the x and y-Values with the init_surface module
         """
-        self.xvals = np.arange(par.XMIN, par.XMAX + 1, par.DELTA_X)
-        self.yvals = init.init_surface(self.xvals)
+        self.xVals = np.arange(-50., 51., 1.)
+        self.yVals = init_surface.init_surface(self.xVals)
 
     def normal_vector(self):
         """
@@ -30,24 +29,23 @@ class Surface:
 
         :returns: x Values, y Values of the normal vectors
         """
-        dx = np.zeros_like(self.xvals)
-        dy = np.zeros_like(self.yvals)
+        x = np.zeros_like(self.xVals)
+        y = np.zeros_like(self.yVals)
 
-        # start and endpoint only have one neighbor
-        dx[0] = self.xvals[1] - self.xvals[0]
-        dy[0] = self.yvals[1] - self.yvals[0]
-        dx[-1] = self.xvals[-1] - self.xvals[-2]
-        dy[-1] = self.yvals[-1] - self.yvals[-2]
+        #start and endpoint only have one neighbor 
+        x[0] = self.xVals[1] - self.xVals[0]
+        y[0] = self.yVals[1] - self.yVals[0]
+        x[-1] = self.xVals[-1] - self.xVals[-2]
+        y[-1] = self.yVals[-1] - self.yVals[-2]
 
-        # right neigbour - left neigbour
-        dy[1:-1] = self.yvals[2:] - self.yvals[:-2]
-        dx[1:-1] = self.xvals[2:] - self.xvals[:-2]
 
-        magnitude = np.linalg.norm([dx, dy], axis=0)
+        #right neigbour - left neigbour
+        y[1:-1] = np.array(self.yVals[2::] - self.yVals[:-2:])
+        x[1:-1] = np.array(self.xVals[2::] - self.xVals[:-2:])
 
-        nx = dy / magnitude
-        ny = -dx / magnitude
-        return nx, ny
+        magnitude = np.linalg.norm([x, y], axis=0)
+
+        return (y / magnitude), (-x / magnitude)
 
     def plot(self, time):
         """
@@ -55,7 +53,7 @@ class Surface:
 
         :param time: current simulation time
         """
-        plt.plot(self.xvals, self.yvals, "x-", label=f"t = {time}")
+        plt.plot(self.xVals, self.yVals, "x-", label=f"t = {time}")
         plt.title('Surface')
         plt.xlabel('x[nm]')
         plt.ylabel('y[nm]')
@@ -66,12 +64,11 @@ class Surface:
 
         format: surface: <time> <npoints> x-positions y-positions
                 x[0] y[0]
-
+        
         :param time: current simulation time
         :param filename: name of the file
         """
         with open(filename, 'a') as f:
-            f.write(
-                f"surface: {time} {len(self.xvals)} x-positions y-positions\n")
-            for x, y in zip(self.xvals, self.yvals):
+            f.write(f"surface: {time} {len(self.xVals)} x-positions y-positions\n")
+            for x, y in zip(self.xVals, self.yVals):
                 f.write(f"{x} {y}\n")
