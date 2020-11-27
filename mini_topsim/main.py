@@ -7,6 +7,8 @@ includes to functions:
 """
 
 import sys
+import os
+
 import matplotlib.pyplot as plt
 
 
@@ -14,6 +16,8 @@ from surface import Surface
 from advance import advance
 from advance import timestep
 import parameters as par
+
+import plot
 
 def mini_topsim():
     """
@@ -34,15 +38,23 @@ def mini_topsim():
     print('Running miniTopSim ...')
 
     if len(sys.argv) > 1:
-        config_file = sys.argv[1]
+        config_filename = sys.argv[1]
     else:
-        config_file = './config1.cfg'
+        config_filename = './config1.cfg'
+
+    config_file = os.path.join(os.path.dirname(__file__), config_filename)
+
 
     if not config_file.endswith('.cfg'):
         print('Error: Incorrect config.')
         sys.exit()
 
     filename = config_file[:-4] + '.srf'
+
+    if os.path.exists(filename):
+        os.remove(filename)
+
+
 
     par.load_parameters(config_file)
 
@@ -51,7 +63,6 @@ def mini_topsim():
 
     surface = Surface()
     time = 0
-    surface.plot(time)
 
     while time < tend:
         surface.write(time, filename)
@@ -60,10 +71,9 @@ def mini_topsim():
         time += dtime
 
     surface.write(time, filename)
-    surface.plot(time)
-    plt.legend()
-    plt.show()
 
+    if par.PLOT_SURFACE:
+        plot.plot(filename)
 
 if __name__ == '__main__':
     mini_topsim()
