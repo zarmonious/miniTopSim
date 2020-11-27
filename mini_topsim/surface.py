@@ -10,6 +10,7 @@ import numpy as np
 import init_surface as init
 import matplotlib.pyplot as plt
 
+import parameters as par
 
 class Surface:
 
@@ -17,7 +18,7 @@ class Surface:
         """
         Initializes the x and y-Values with the init_surface module
         """
-        self.xvals = np.arange(-50., 51., 1.)
+        self.xvals = np.arange(par.XMIN, par.XMAX + 1, par.DELTA_X)
         self.yvals = init.init_surface(self.xvals)
 
     def normal_vector(self):

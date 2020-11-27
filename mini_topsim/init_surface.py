@@ -5,6 +5,8 @@ Implements a function "init_surface" to initialize the Surface
 import numpy as np
 import math
 
+import parameters as par
+
 
 def init_surface(xvals):
     """
@@ -16,9 +18,10 @@ def init_surface(xvals):
 
     :returns: y-Values of the initialized surface
     """
-    mask = ((xvals >= -25) & (xvals <= 25))
+    mask = ((xvals >= par.FUN_XMIN) & (xvals <= par.FUN_XMAX))
     yvals = np.zeros_like(xvals)
 
-    yvals[mask] = ((-50) * (1 + np.cos((2*np.pi*xvals[mask])/50)))
-
+    yvals[mask] = ((-par.FUN_PEAK_TO_PEAK / 2) * (1 +
+        np.cos((2*np.pi*xvals[mask])/50))) 
+    
     return yvals

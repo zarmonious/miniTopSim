@@ -9,10 +9,11 @@ includes to functions:
 import sys
 import matplotlib.pyplot as plt
 
+
 from surface import Surface
 from advance import advance
 from advance import timestep
-
+import parameters as par
 
 def mini_topsim():
     """
@@ -33,15 +34,23 @@ def mini_topsim():
     print('Running miniTopSim ...')
 
     if len(sys.argv) > 1:
-        tend = int(sys.argv[1])
-        dt = int(sys.argv[2])
+        config_file = sys.argv[1]
     else:
-        tend = 10
-        dt = 1
+        config_file = './config1.cfg'
+
+    if not config_file.endswith('.cfg'):
+        print('Error: Incorrect config.')
+        sys.exit()
+
+    filename = config_file[:-4] + '.srf'
+
+    par.load_parameters(config_file)
+
+    tend = par.TOTAL_TIME
+    dt = par.TIME_STEP
 
     surface = Surface()
     time = 0
-    filename = f"basic_{tend}_{dt}.srf"
     surface.plot(time)
 
     while time < tend:
