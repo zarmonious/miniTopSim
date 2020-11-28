@@ -26,6 +26,9 @@ FUN_XMAX = (-25., 'FUN_XMAX <= XMAX and FUN_XMAX > FUN_XMIN',
     For FUN_XMAX < x < XMAX the surface function is assumed to be constant
     and equal to its value at x = FUN_XMAX.
     ''')
+FUN_PEAK_TO_PEAK = (100., None, '''Maximum deflection value of the function in
+    relation to y=0. Negative values indicate deflection in negative v-direction
+    .''')
 
 [Numerics]
 TIME_STEP = (1., 'TIME_STEP > 0.',
