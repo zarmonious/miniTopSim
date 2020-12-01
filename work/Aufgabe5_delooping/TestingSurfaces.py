@@ -13,7 +13,7 @@ y1 = np.array((5.0, 5.5, 5.3, 4.0, 5.0, 5.5, 5.5, 4.0, 5.0, 4.7, 4.0))
 
 p1 = np.transpose(np.concatenate((x1, y1)).reshape((2, 11)))
 
-p2 = np.random.rand(1000, 2)
+p2 = np.random.rand(100, 2)
 
 
 

@@ -155,6 +155,8 @@ print('Starting deloop')
 deloopagain = True
 #deloop2(p)
 start_time = time.time()
+time = time.clock()
+print(time)
 while deloopagain:
     surface = deloop(surface)
 print("--- %s seconds ---" % (time.time() - start_time))
