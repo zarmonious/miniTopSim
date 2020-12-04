@@ -14,7 +14,7 @@ import parameters as par
 
 def advance(surface, dtime):
     """
-    calculates the movement of the surface fpr a timestep dtime
+    calculates the movement of the surface for a timestep dtime
 
     :param surface: surface that is being calculated
     :param dtime: timstep of the calculation

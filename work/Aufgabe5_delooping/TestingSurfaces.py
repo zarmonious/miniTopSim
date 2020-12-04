@@ -15,9 +15,15 @@ p1 = np.transpose(np.concatenate((x1, y1)).reshape((2, 11)))
 
 p2 = np.random.rand(100, 2)
 
+x3 = np.array((0.0, 1.0, 2.0, 1.0, 1.3, 2.0, 3.0, 4.0, 5.0, 3.0, 2.0, 5.0, 5.7,
+               6.0, 7.0, 8.0, 7.0, 7.3, 8.0, 9.0, 10.0, 11.0, 9.0, 8.0, 11.0, 12))
+y3 = np.array((5.0, 5.5, 5.3, 4.0, 5.0, 5.5, 5.5, 4.0, 5.0, 4.7, 4.0, 3.5, 4.9,
+               5.0, 5.5, 5.3, 4.0, 5.0, 5.5, 5.5, 4.0, 5.0, 4.7, 4.0, 3.5, 5))
+
+p3 = np.transpose(np.concatenate((x3, y3)).reshape((2, 26)))
 
 
 if __name__ == '__main__':
 
-    plt.plot(p[:, 0], p[:, 1], 'b+-', label='Surfacepoints')
+    plt.plot(p3[:, 0], p3[:, 1], 'b+-', label='Surfacepoints')
     plt.show()

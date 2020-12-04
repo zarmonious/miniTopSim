@@ -20,6 +20,7 @@ class Surface:
         """
         self.xvals = np.arange(par.XMIN, par.XMAX + 1, par.DELTA_X)
         self.yvals = init.init_surface(self.xvals)
+        self.points = np.concatenate((self.xvals, self.yvals)).reshape((2, self.xvals.size))
 
     def normal_vector(self):
         """
@@ -75,3 +76,15 @@ class Surface:
                 f"surface: {time} {len(self.xvals)} x-positions y-positions\n")
             for x, y in zip(self.xvals, self.yvals):
                 f.write(f"{x} {y}\n")
+
+    def deloop(self):
+        """This method removes the loopes created by advancing the simulation
+
+        format:
+
+        :param <>:
+        """
+
+        print(np.size(self.points))
+
+

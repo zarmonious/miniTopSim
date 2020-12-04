@@ -8,11 +8,15 @@ y = np.array((5.0, 5.5, 5.3, 4.0, 6.5, 5.0, 6.0))
 
 p = np.transpose(np.concatenate((x, y)).reshape((2, 7)))
 print(p)
+print(np.size(p))
 intervall = np.arange(2,4)
 print('Intervall = {}'.format(intervall))
 print(np.delete(p, intervall, 0))
 i=0
-
+print(np.array((3, 4)))
+test = np.array((3, 4))
+test = np.reshape(test,(1, 2))
+print(test.shape)
 while i < 10000:
     i += 1
 
@@ -39,3 +43,7 @@ print(testbool)
 Stop_Time = t()
 print('++++++++++++++++')
 print(Stop_Time-Start_Time)
+print('//////////////////////')
+print(x)
+x = np.delete(x, (1,3,5),axis=0)
+print(x)
