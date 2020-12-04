@@ -51,10 +51,11 @@ def compare_segments(segment_pair):
 
     b = [[segment_pair.x21 - segment_pair.x11],
          [segment_pair.y21 - segment_pair.y11]]
-    erg = np.linalg.solve(a, b)
 
-    if 0 < erg[0] < 1 and 0 < erg[1] < 1:
-        return np.transpose(erg)
+    if np.linalg.det(a) != 0:
+        erg = np.linalg.solve(a, b)
+        if 0 < erg[0] < 1 and 0 < erg[1] < 1:
+            return np.transpose(erg)
 
 
 def removelooppoints2(restult_list, points):
