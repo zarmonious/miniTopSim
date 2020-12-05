@@ -23,16 +23,11 @@ def mini_topsim():
     """
     Reads the Simulation parameters, starts the sim, plots and writes to file
 
-    the first sys.argv[1] is the simulation time 
-    the second sys.argv[2] is the timestep
+    the first sys.argv[1] is the config file name.
 
-    if no sys arguments are passed the simulation starts with tend=10 and dt=1
-    creates a Surface Object and starts the simulation. 
-    the correct timestep is calculated with the timestep function 
-    from the advance module. 
+    if no sys argument is passed the programm will stop.
     Writes all calculated datapoints to a file with the 
-    filenname: basic_<tend>_<dt>.srf
-    plots the simulation fpr t = 0 and t = tend
+    filenname: <config_file_name>.srf
 
     """
     print('Running miniTopSim ...')
@@ -40,7 +35,8 @@ def mini_topsim():
     if len(sys.argv) > 1:
         config_filename = sys.argv[1]
     else:
-        config_filename = './config1.cfg'
+        print("Error: No config passed.")
+        sys.exit()
 
     config_file = os.path.join(os.path.dirname(__file__), config_filename)
 
@@ -49,7 +45,7 @@ def mini_topsim():
         print('Error: Incorrect config.')
         sys.exit()
 
-    filename = config_file[:-4] + '.srf'
+    filename = os.path.splitext(config_file)[0] + '.srf'
 
     if os.path.exists(filename):
         os.remove(filename)

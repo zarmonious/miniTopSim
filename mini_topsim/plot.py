@@ -220,7 +220,7 @@ class _SurfacePlotter:
             return
 
         elif(event.key == 's'):
-            fname = self.filename[:-4] + '.png'
+            fname = os.path.splitext(self.filename)[0] + '.png'
             plt.savefig(fname, dpi = 420)
             return
 
