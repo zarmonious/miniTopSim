@@ -45,13 +45,23 @@ def timestep(dtime, time, end_time):
     return dtime if (time + dtime) <= end_time else (end_time - time)
 
 def get_velocities(ny):
+    """
+    returns the surface velocities for each point
+
+    depending on the ETCHING parameter this function either returns the value
+    of the ETCH_RATE parameter for etching, or calculates the surface
+    velocity depending on the sputter flux density.
+
+    :param ny: y-component of the surface normal
+
+    :returns: surface velocity for each surface point
+    """
     if par.ETCHING is True:
         v = par.ETCH_RATE
     else:
         sputter.init_sputtering()
-        costheta = abs(-1*ny)
+        costheta = abs(ny)
         Y = sputter.get_sputter_yield(costheta)
-        print(Y)
         v=(par.BEAM_CURRENT_DENSITY/sciconst.e * Y * costheta) / par.DENSITY
         v=v*1e6
         

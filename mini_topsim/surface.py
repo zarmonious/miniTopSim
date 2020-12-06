@@ -77,6 +77,10 @@ class Surface:
                 f.write(f"{x} {y}\n")
     
     def eliminate_overhangs(self):
+        """
+        eliminates surface overhangs
+        """
+
         index = int(len(self.xvals)/2)
         for index_offset in range(1,index): 
             leftindex = index-index_offset

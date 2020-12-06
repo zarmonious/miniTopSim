@@ -1,6 +1,7 @@
 [Setup]
 ETCHING = (False, None,
     '''Flag selecting the simulation mode between etching and sputtering.
+    True = Etching, False  = Sputtering
     ''')
 
 [Initial Conditions]
@@ -49,19 +50,21 @@ ETCH_RATE = (1., None,
     '''Etch rate = surface velocity (nm/s) if ETCHING==True.
     ''')
 SPUTTER_YIELD_0 = (3.25, 'SPUTTER_YIELD_0 > 0',
-    '''Add description'''
-    )
+    '''The Y0 parameter of the Yamamura formula to calculate the sputter yield.
+    ''')
 SPUTTER_YIELD_F = (1.41, 'SPUTTER_YIELD_F > 0',
-    '''Add description'''
-    )
+    '''The f parameter of the Yamamura formula to calculate the sputter yield.
+    ''')
 SPUTTER_YIELD_B = (0.17, 'SPUTTER_YIELD_B > 0',
-    '''Add description'''
-    )
+    '''The b parameter of the Yamamura formula to calculate the sputter yield.
+    ''')
 SPUTTER_YIELD_FILE = ('', None,
-    '''Add description'''
+    '''Filename of a file containing the sputter yield in relation to the angle
+    theta between the sputter beam and the surface normal. The file has to be 
+    stored in the tables subdirectory.'''
     )
 DENSITY = (5e22, 'DENSITY > 0',
-    '''Add description'''
+    '''Atom density of the sputtered material in atoms/cm^3'''
     )
 
 [Output]
