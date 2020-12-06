@@ -75,3 +75,17 @@ class Surface:
                 f"surface: {time} {len(self.xvals)} x-positions y-positions\n")
             for x, y in zip(self.xvals, self.yvals):
                 f.write(f"{x} {y}\n")
+    
+    def eliminate_overhangs(self):
+        index = int(len(self.xvals)/2)
+        for index_offset in range(1,index): 
+            leftindex = index-index_offset
+            rightindex = index + index_offset
+            if (self.xvals[leftindex] > self.xvals[leftindex+1] and
+                self.yvals[leftindex] > self.yvals[leftindex+1]):
+                self.xvals[leftindex] = self. xvals[leftindex+1]
+
+            if (self.xvals[rightindex] < self.xvals[rightindex-1] and
+                self.yvals[rightindex] > self.yvals[rightindex-1]):
+                self.xvals[rightindex] = self.xvals[rightindex-1]
+

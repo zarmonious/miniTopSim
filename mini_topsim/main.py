@@ -68,6 +68,7 @@ def mini_topsim():
         surface.write(time, filename)
         dtime = timestep(dt, time, tend)
         advance(surface, dtime)
+        surface.eliminate_overhangs()
         time += dtime
 
     surface.write(time, filename)

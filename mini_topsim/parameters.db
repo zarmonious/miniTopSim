@@ -1,5 +1,5 @@
 [Setup]
-ETCHING = (True, 'ETCHING',
+ETCHING = (False, None,
     '''Flag selecting the simulation mode between etching and sputtering.
     ''')
 
@@ -39,11 +39,30 @@ TIME_STEP = (1., 'TIME_STEP > 0.',
 TOTAL_TIME = (float, 'TOTAL_TIME > 0.',
     '''Total beam time = total simulation time.
     ''')
+BEAM_CURRENT_DENSITY = (0.001, 'BEAM_CURRENT_DENSITY > 0',
+    '''Beam current density J = F_beam*e; F_beam = Beam flux density;
+    e = elementary charge
+    ''')
 
 [Physics]
 ETCH_RATE = (1., None,
     '''Etch rate = surface velocity (nm/s) if ETCHING==True.
     ''')
+SPUTTER_YIELD_0 = (3.25, 'SPUTTER_YIELD_0 > 0',
+    '''Add description'''
+    )
+SPUTTER_YIELD_F = (1.41, 'SPUTTER_YIELD_F > 0',
+    '''Add description'''
+    )
+SPUTTER_YIELD_B = (0.17, 'SPUTTER_YIELD_B > 0',
+    '''Add description'''
+    )
+SPUTTER_YIELD_FILE = ('', None,
+    '''Add description'''
+    )
+DENSITY = (5e22, 'DENSITY > 0',
+    '''Add description'''
+    )
 
 [Output]
 PLOT_SURFACE = (True, None,
