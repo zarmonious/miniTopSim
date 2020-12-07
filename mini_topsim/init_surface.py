@@ -3,7 +3,7 @@ Implements a function "init_surface" to initialize the Surface
 """
 
 import numpy as np
-import math
+#import math
 
 import parameters as par
 
@@ -20,12 +20,12 @@ def init_surface(xvals):
     
     Parameters
     ----------
-    xvals : list
+    xvals : np.array
         x-values of the surface.
 
     Returns
     -------
-    yvals : list
+    yvals : np.array
         y-Values of the initialized surface.
     """
     
@@ -41,8 +41,6 @@ def init_surface(xvals):
     elif par.INITIAL_SURFACE_TYPE == 'V-Shape':
         print('Noch nicht implementiert!!')
         
-    elif par.INITIAL_SURFACE_TYPE == 'File':
-        print('Noch nicht implementiert!!')
         
     else:
         yvals=_cosine(xvals)
@@ -56,12 +54,12 @@ def _flat(xvals):
 
     Parameters
     ----------
-    xvals : list
+    xvals : np.array
         x-values of the surface.
 
     Returns
     -------
-    yvals : list
+    yvals : np.array
         y-Values of the initialized surface.
 
     """
@@ -75,12 +73,12 @@ def _cosine(xvals):
 
     Parameters
     ----------
-    xvals : list
+    xvals : np.array
         x-values of the surface.
 
     Returns
     -------
-    yvals : list
+    yvals : np.array
         y-Values of the initialized surface.
 
     """
@@ -98,12 +96,12 @@ def _double_cosine(xvals):
 
     Parameters
     ----------
-    xvals : list
+    xvals : np.array
         x-values of the surface.
 
     Returns
     -------
-    yvals : list
+    yvals : np.array
         y-Values of the initialized surface.
 
     """
@@ -124,12 +122,12 @@ def _step(xvals):
 
     Parameters
     ----------
-    xvals : list
+    xvals : np.array
         x-values of the surface.
 
     Returns
     -------
-    yvals : list
+    yvals : np.array
         y-Values of the initialized surface.
 
     """
@@ -140,7 +138,7 @@ def _step(xvals):
     yvals[mask_min]=par.FUN_PEAK_TO_PEAK
     
 
-    k,d=find_linar_poly(par.FUN_XMIN, par.FUN_PEAK_TO_PEAK, par.FUN_XMAX, 0)
+    k,d=_find_linar_poly(par.FUN_XMIN, par.FUN_PEAK_TO_PEAK, par.FUN_XMAX, 0)
 
 
     yvals[mask] = k*xvals[mask]+d
@@ -153,12 +151,12 @@ def _vshape(xvals):
 
     Parameters
     ----------
-    xvals : list
+    xvals : np.array
         x-values of the surface.
 
     Returns
     -------
-    yvals : list
+    yvals : np.array
         y-Values of the initialized surface.
 
     """
@@ -172,8 +170,75 @@ def _vshape(xvals):
 
 #def _file()
 
-def find_linar_poly(p1_x, p1_y, p2_x, p2_y):
-    
+def _find_linar_poly(p1_x, p1_y, p2_x, p2_y):
+    """
+    Finding the linear polynomial y=kx+d from two points
+
+    Parameters
+    ----------
+    p1_x : float
+        X value of first point.
+    p1_y : float
+        Y value of first point.
+    p2_x : float
+        X value of second point.
+    p2_y : float
+        Y value of second point.
+
+    Returns
+    -------
+    k : float
+        Slope of the linear polynomial.
+    d : float
+        Intersection with y-axis.
+
+    """
     k = (p2_y-p1_y)/(p2_x - p1_x)
     d = p1_y - k * p1_x
     return k,d
+
+def read_srf_file(filename,time):
+    '''
+    Reads x/y Values from srf-file at given time_stamp
+
+    Parameters
+    ----------
+    filename : str
+        Absolut path of given srf-file.
+    time : float
+        The time stamp where data will be taken.
+        
+    Returns
+    -------
+    xvalues : np.array
+        x-Values of the initialized surface.
+    yvalues : np.array
+        y-Values of the initialized surface.
+
+    '''
+    xvalues_list = list()
+    yvalues_list = list()
+
+    n_values = 0
+
+    
+    with open(filename) as file:
+
+        for line_index, line in enumerate(file):
+            if 'surface:' +' '+ str(time) in line:
+                string_array = line.split(' ')
+
+                n_values=(int(string_array[2]))
+                
+                for n, line in enumerate(file):
+                    if n<n_values:
+                        value_array = line.split(' ')
+                        xvalues_list.append(float(value_array[0]))
+                        yvalues_list.append(float(value_array[1]))
+                        
+    xvalues = np.array(xvalues_list)
+    yvalues = np.array(yvalues_list)
+               
+                  
+    return xvalues, yvalues
+

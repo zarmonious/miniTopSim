@@ -9,6 +9,7 @@ includes function
 import numpy as np
 import init_surface as init
 import matplotlib.pyplot as plt
+import os
 
 import parameters as par
 
@@ -18,8 +19,18 @@ class Surface:
         """
         Initializes the x and y-Values with the init_surface module
         """
-        self.xvals = np.arange(par.XMIN, par.XMAX + 1, par.DELTA_X)
-        self.yvals = init.init_surface(self.xvals)
+        if par.INITIAL_SURFACE_TYPE == 'File':
+            
+            srf_file = os.path.join(os.path.dirname(__file__), 
+                                    par.INITIAL_SURFACE_FILE)
+
+            
+            self.xvals, self.yvals = init.read_srf_file(srf_file, 
+                                                        par.TOTAL_TIME)
+
+        else:    
+            self.xvals = np.arange(par.XMIN, par.XMAX + 1, par.DELTA_X)
+            self.yvals = init.init_surface(self.xvals)
 
     def normal_vector(self):
         """
