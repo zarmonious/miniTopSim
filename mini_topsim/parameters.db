@@ -17,9 +17,9 @@ INITIAL_SURFACE_TYPE = ('Cosine',
 	'INITIAL_SURFACE_TYPE in ("Flat","Cosine","DoubleCosine","Step","V-Shape","File")',
     '''Initial surface type.
     ''')
-INITIAL_SURFACE_FILE = ('Cosine.srf', INITIAL_SURFACE_FILE.endswith(".srf")',
+INITIAL_SURFACE_FILE = ('Cosine.srf', 'INITIAL_SURFACE_FILE.endswith(".srf")',
 	'''Read srf-file, only when INITIAL_SURFACE_TYPE ='File'
-	'''
+	''')
 FUN_XMIN = (-25., 'FUN_XMIN >= XMIN',
     '''Lower boundary (nm) of initial surface function.
     For XMIN < x < FUN_XMIN the surface function is assumed to be constant
