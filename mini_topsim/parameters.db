@@ -13,9 +13,13 @@ XMAX = (50., 'XMAX > XMIN',
 DELTA_X = (1., 'DELTA_X > 0.',
     '''Increment of x values (nm) of the initial surface.
     ''')
-INITIAL_SURFACE_TYPE = ('Cosine', 'INITIAL_SURFACE_TYPE in ("Cosine",)',
+INITIAL_SURFACE_TYPE = ('Cosine', 
+	'INITIAL_SURFACE_TYPE in ("Flat","Cosine","DoubleCosine","Step","V-Shape","File")',
     '''Initial surface type.
     ''')
+INITIAL_SURFACE_FILE = ('Cosine.srf', INITIAL_SURFACE_FILE.endswith(".srf")',
+	'''Read srf-file, only when INITIAL_SURFACE_TYPE ='File'
+	'''
 FUN_XMIN = (-25., 'FUN_XMIN >= XMIN',
     '''Lower boundary (nm) of initial surface function.
     For XMIN < x < FUN_XMIN the surface function is assumed to be constant
@@ -27,7 +31,7 @@ FUN_XMAX = (-25., 'FUN_XMAX <= XMAX and FUN_XMAX > FUN_XMIN',
     and equal to its value at x = FUN_XMAX.
     ''')
 FUN_PEAK_TO_PEAK = (100., None, '''Maximum deflection value of the function in
-    relation to y=0. Negative values indicate deflection in negative v-direction
+    relation to y=0. Negative values indicate deflection in negative y-direction
     .''')
 
 [Numerics]
