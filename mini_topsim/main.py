@@ -19,7 +19,7 @@ import parameters as par
 
 import plot
 
-def mini_topsim():
+def mini_topsim(config_file):
     """
     Reads the Simulation parameters, starts the sim, plots and writes to file
 
@@ -37,24 +37,10 @@ def mini_topsim():
     """
     print('Running miniTopSim ...')
 
-    if len(sys.argv) > 1:
-        config_filename = sys.argv[1]
-    else:
-        config_filename = './config1.cfg'
-
-    config_file = os.path.join(os.path.dirname(__file__), config_filename)
-
-
-    if not config_file.endswith('.cfg'):
-        print('Error: Incorrect config.')
-        sys.exit()
-
     filename = config_file[:-4] + '.srf'
 
     if os.path.exists(filename):
         os.remove(filename)
-
-
 
     par.load_parameters(config_file)
 
@@ -76,4 +62,16 @@ def mini_topsim():
         plot.plot(filename)
 
 if __name__ == '__main__':
-    mini_topsim()
+
+    if len(sys.argv) > 1:
+        config_filename = sys.argv[1]
+    else:
+        config_filename = 'config1.cfg'
+
+    config_file = os.path.join(os.path.dirname(__file__), config_filename)
+
+    if not config_file.endswith('.cfg'):
+        print('Error: Incorrect config.')
+        sys.exit()
+    mini_topsim(config_filename)
+

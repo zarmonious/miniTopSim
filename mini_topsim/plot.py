@@ -116,7 +116,7 @@ class _SurfacePlotter:
         ValueError: if file is not formatted correctly
     '''
 
-    def __init__(self, filename):
+    def __init__(self, filename, reffilename = None):
         '''
         Initializes all class parameters and changes default plt keybindings.
         '''
@@ -142,7 +142,11 @@ class _SurfacePlotter:
         plt.rcParams['keymap.save'] = ['ctrl+s']
         plt.rcParams['keymap.quit'] = ['ctrl+w', 'cmd+w']
         self._read_srf_file()
-
+        if reffilename != None:
+            self.refsrf = _SurfacePlotter(reffilename)
+        else:
+            self.refsrf = None
+            
     def _read_srf_file(self):
         '''
         Extracts x/y-values, time and number of points from the .srf file
@@ -254,13 +258,20 @@ class _SurfacePlotter:
             box = ax.get_position()
             ax.set_position([box.x0, box.y0, box.width * 0.9, box.height])
 
-
         if(self.alreadyplotted_list[self.surface_index] == False):
             plt.plot(self.xpoints_list[self.surface_index], 
-                   self.ypoints_list[self.surface_index], 
-                   label='t = ' + str(self.time_list[self.surface_index]) + 's')
-            self.alreadyplotted_list[self.surface_index] = True
+               self.ypoints_list[self.surface_index], 
+               label='srf1:\nt = ' + str(self.time_list[self.surface_index]) + 's')
+            
+            if self.refsrf != None:
+                # plot surface with nearest time in reference file
+                time = self.time_list[self.surface_index]
+                refsrf_idx = self.refsrf.find_nearest(time)
+                plt.plot(self.refsrf.xpoints_list[refsrf_idx], 
+                   self.refsrf.ypoints_list[refsrf_idx], linestyle='dashed',
+                   label='srf2:\nt = ' + str(self.refsrf.time_list[refsrf_idx]) + 's')
 
+        self.alreadyplotted_list[self.surface_index] = True
         if(self.boundarymode_auto != True):
             plt.ylim(self.ylim)
             plt.xlim(self.xlim)
@@ -282,7 +293,9 @@ class _SurfacePlotter:
         plt.grid(True, 'both', 'both')
         plt.draw()
         
-
+    def find_nearest(self, time):
+        return (np.abs(np.asarray(self.time_list) - time)).argmin()
+        
     def plot_interactive(self):
         '''
         Starts the interactive plot
@@ -292,7 +305,6 @@ class _SurfacePlotter:
         self.update_plot()
         plt.show()
 
-
 class WrongFileExtensionError(Exception):
     '''
     Gets raised if the FileExtension is not correct
@@ -300,11 +312,11 @@ class WrongFileExtensionError(Exception):
     pass
 
 
-def plot(filename):
+def plot(filename, reffilename = None):
     '''
     Plots the 2D-surfaces from a \'.srf\' file in an interactive plt-plot.
 
-    Keybindings:
+    Keybindings:  
     [Space]: shows next/previous surface
     [0-9]: only show each 2^n-th surface when pressing [Space]
     [f]: show first surface
@@ -341,7 +353,7 @@ def plot(filename):
         IndexError: if file is not formatted correctly
         ValueError: if file is not formatted correctly
     '''
-    plotter = _SurfacePlotter(filename)
+    plotter = _SurfacePlotter(filename, reffilename)
     plotter.plot_interactive()
 
 
@@ -353,8 +365,10 @@ if __name__ == '__main__':
 
     If no filename is specified the default name 'trench.srf_save' will be used.
     '''
-    if(len(sys.argv) >= 2):
+    if(len(sys.argv) == 2):
         plot(sys.argv[1])
+    elif(len(sys.argv) == 3):
+        plot(sys.argv[1], sys.argv[2]) 
     else:
         print('plot.py: no file specified! Using default file.')
-        plot('work/Aufgabe3_plot/trench.srf_save')
+        plot('config1.srf')
