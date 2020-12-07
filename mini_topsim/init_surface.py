@@ -33,10 +33,10 @@ def init_surface(xvals):
         yvals=_flat(xvals)
         
     elif par.INITIAL_SURFACE_TYPE == 'DoubleCosine':
-        print('Noch nicht implementiert!!')
+        yvals=_double_cosine(xvals)
         
     elif par.INITIAL_SURFACE_TYPE == 'Step':
-        print('Noch nicht implementiert!!')
+        yvals=_step(xvals)
         
     elif par.INITIAL_SURFACE_TYPE == 'V-Shape':
         print('Noch nicht implementiert!!')
@@ -91,3 +91,89 @@ def _cosine(xvals):
         np.cos((2*np.pi*xvals[mask])/50))) 
     
     return yvals
+
+def _double_cosine(xvals):
+    """
+    Function for double cosine surface with boundary conditions
+
+    Parameters
+    ----------
+    xvals : list
+        x-values of the surface.
+
+    Returns
+    -------
+    yvals : list
+        y-Values of the initialized surface.
+
+    """
+    mask = ((xvals >= par.FUN_XMIN) & (xvals <= par.FUN_XMAX))
+    yvals = np.zeros_like(xvals)
+    
+    yvals[mask] = ((par.FUN_PEAK_TO_PEAK / 2) * (1 +
+        np.cos(((4*np.pi*xvals[mask])+50*np.pi)/50))) 
+    
+    return yvals
+
+def _step(xvals):
+    """
+    Function for step surface with boundary conditions
+    
+    Step function with or without angle of inclination (depending on:
+    FUN_XMIN=FUN_XMAX or FUN_XMIN<FUN_XMAX).                                                   
+
+    Parameters
+    ----------
+    xvals : list
+        x-values of the surface.
+
+    Returns
+    -------
+    yvals : list
+        y-Values of the initialized surface.
+
+    """
+    mask = ((xvals >= par.FUN_XMIN) & (xvals <= par.FUN_XMAX))
+    mask_min= (xvals<par.FUN_XMIN)
+    
+    yvals = np.zeros_like(xvals)
+    yvals[mask_min]=par.FUN_PEAK_TO_PEAK
+    
+
+    k,d=find_linar_poly(par.FUN_XMIN, par.FUN_PEAK_TO_PEAK, par.FUN_XMAX, 0)
+
+
+    yvals[mask] = k*xvals[mask]+d
+
+    return yvals
+
+def _vshape(xvals):
+    """
+    Function for v-shape surface with boundary conditions
+
+    Parameters
+    ----------
+    xvals : list
+        x-values of the surface.
+
+    Returns
+    -------
+    yvals : list
+        y-Values of the initialized surface.
+
+    """
+    mask = ((xvals >= par.FUN_XMIN) & (xvals <= par.FUN_XMAX))
+    yvals = np.zeros_like(xvals)
+    
+    yvals[mask] = ((par.FUN_PEAK_TO_PEAK / 2) * (1 +
+        np.cos((2*np.pi*xvals[mask])/50))) 
+    
+    return yvals
+
+#def _file()
+
+def find_linar_poly(p1_x, p1_y, p2_x, p2_y):
+    
+    k = (p2_y-p1_y)/(p2_x - p1_x)
+    d = p1_y - k * p1_x
+    return k,d
