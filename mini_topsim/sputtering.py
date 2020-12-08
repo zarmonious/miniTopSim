@@ -40,7 +40,9 @@ class Sputter_yield_Yamamura():
         :returns: Sputter yield Y
         """
         Y=self.Y0*costheta**(-self.f) * np.exp(self.b*(1-1/costheta))
-        Y[np.isnan(Y)]=0
+        
+        #removes division by 0 errors. If costheta = 0 Y should be 0
+        Y[np.isnan(Y)]=0 
         return Y
 
 class Sputter_yield_table():
