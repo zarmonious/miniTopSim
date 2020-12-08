@@ -3,7 +3,7 @@ Implements a function "init_surface" to initialize the Surface
 """
 
 import numpy as np
-#import math
+
 
 import parameters as par
 
@@ -39,7 +39,7 @@ def init_surface(xvals):
         yvals=_step(xvals)
         
     elif par.INITIAL_SURFACE_TYPE == 'V-Shape':
-        print('Noch nicht implementiert!!')
+        yvals=_vshape(xvals)
         
         
     else:
@@ -146,7 +146,7 @@ def _step(xvals):
     return yvals
 
 def _vshape(xvals):
-    """
+    '''
     Function for v-shape surface with boundary conditions
 
     Parameters
@@ -159,14 +159,26 @@ def _vshape(xvals):
     yvals : np.array
         y-Values of the initialized surface.
 
-    """
-    mask = ((xvals >= par.FUN_XMIN) & (xvals <= par.FUN_XMAX))
+    '''
+
+    center = par.FUN_XMIN+(par.FUN_XMAX-par.FUN_XMIN)/2
+
+    mask_left = ((xvals >= par.FUN_XMIN) & (xvals <= center))
+    mask_right = ((xvals >= center) & (xvals <= par.FUN_XMAX))
+
     yvals = np.zeros_like(xvals)
     
-    yvals[mask] = ((par.FUN_PEAK_TO_PEAK / 2) * (1 +
-        np.cos((2*np.pi*xvals[mask])/50))) 
+
+    k1,d1=_find_linar_poly(par.FUN_XMIN, 0, center, par.FUN_PEAK_TO_PEAK)
+    k2,d2=_find_linar_poly(center, par.FUN_PEAK_TO_PEAK, par.FUN_XMAX, 0)
+
+
+    yvals[mask_left] = k1*xvals[mask_left]+d1
+    yvals[mask_right] = k2*xvals[mask_right]+d2
     
     return yvals
+
+
 
 #def _file()
 
