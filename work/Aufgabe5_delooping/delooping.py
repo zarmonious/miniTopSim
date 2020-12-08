@@ -80,6 +80,7 @@ def removeflaged(points):
     points = np.delete(points, (intervall), axis=0)
     return points
 
+
 def deloop2(points):
     """Hier wird versucht das ganze als whole array operationen zu machen"""
     print('Strart deloop2')
@@ -204,9 +205,10 @@ deloopagain = True
 start_time = time.time()
 deloopedsurface2 = deloop2(surface)
 stop_time = time.time()
-print(float(stop_time-start_time))
+print(float(stop_time - start_time))
 
 plt.plot(surfaceold[:, 0], surfaceold[:, 1], 'b+-', label='Surfacepoints')
-plt.plot(deloopedsurface2[:, 0], deloopedsurface2[:, 1], 'k*-', label='Delooped Surface')
+plt.plot(deloopedsurface2[:, 0], deloopedsurface2[:, 1], 'k*-',
+         label='Delooped Surface')
 plt.grid()
 plt.show()

@@ -95,21 +95,24 @@ class Surface:
         self.yvals = self.points[:, 1]
 
     def _create_matrix(self):
-        compare_matrix = np.zeros(
-            (int(self.xvals.size - 2), int(self.xvals.size - 2)),
-            Segment_pair)
-        print('comparematrix shape : {}'.format(compare_matrix.shape))
+        compare_matrix_a = np.zeros(
+            (int(self.xvals.size - 2), int(self.xvals.size - 2)))
+        compare_matrix_b = np.zeros((int(self.xvals-2), 1))
+        #print('comparematrix shape : {}'.format(compare_matrix.shape))
         for i, pointi in enumerate(self.points):
             if i < int(self.xvals.size - 1):
                 pointiplusone = self.points[i+1, :]
                 for j, pointj in enumerate(self.points):
                     if j > i and j < int(self.xvals.size - 1):
                         pointjplusone = self.points[j + 1, :]
-                        compare_matrix[i, j - 1] = Segment_pair(pointi,
-                                                                pointiplusone,
-                                                                pointj,
-                                                                pointjplusone)
-        return compare_matrix
+                        compare_matrix_a[i, j - 1] = np.concatenate((pointiplusone
+                                    - pointi, -pointjplusone+pointj), axis=0)
+                        #compare_matrix[i, j - 1] = Segment_pair(pointi,
+                         #                                       pointiplusone,
+                          #                                      pointj,
+                           #                                     pointjplusone)
+        compare_matrix_b[i] = np.concatenate(pointj - pointi)
+        return compare_matrix_a, compare_matrix_b
 
     def _compare_segments(self, segment_pair):
         a = [[segment_pair.x12 - segment_pair.x11,
@@ -126,13 +129,13 @@ class Surface:
             #print('Determinat is non Zero')
             erg = np.linalg.solve(a, b)
             if 0 < erg[0] < 1 and 0 < erg[1] < 1:
-                print('Intersection found!')
+                #print('Intersection found!')
                 return np.transpose(erg)
 
     def _intersectionpoint(self, result, i, j):
         newpoint = self.points[i, :] + (self.points[i+1, :] - self.points[i, :]
                                         )* result[0, 0]
-        print('new Point: {}'.format(newpoint))
+        #print('new Point: {}'.format(newpoint))
         return np.reshape(newpoint, (1, 2))
 
     def _removelooppoints(self, restult_list):
@@ -160,13 +163,13 @@ class Surface:
 
         :param <>:
         """
-        print('Entering deloop!')
+        #print('Entering deloop!')
         #print('in deloop yvals : {}'.format(self.yvals))
         #print(self.xvals.reshape((self.xvals.size, 1)).shape)
         #(self.points)
         self._update_points()
         compare_matrix = self._create_matrix()
-        print('Compare Matrix shape: {}'.format(compare_matrix.shape))
+        #print('Compare Matrix shape: {}'.format(compare_matrix.shape))
         #print(compare_matrix[0,0].x11)
         #print(compare_matrix[0, 0].y11)
         result_list = np.zeros((0, 4), dtype=float)
@@ -179,7 +182,7 @@ class Surface:
                     resultij = np.concatenate((newpoint, indexarray), axis=1)
                     result_list = np.concatenate((result_list, resultij))
         result_list = np.flip(result_list, axis=0)
-        print('The resultlist is: {}'.format(result_list))
+        #print('The resultlist is: {}'.format(result_list))
         self._removelooppoints(result_list)
         #print('points after inserting none outside the method: {}'.format(self.points))
         self._insertintersectionpoint(result_list)
