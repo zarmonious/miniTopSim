@@ -1,16 +1,17 @@
 """
 Defines the class Surface
 
-includes function 
+includes function
 "normal_vector" calculates the normal vectors in every point of the surface
 "plot" which plots the surface
 "write" which writes the surface points into a .srf file
 """
 import numpy as np
-import init_surface as init
+#import init_surface as init
 import matplotlib.pyplot as plt
+import TestingSurfaces
 
-import parameters as par
+#import parameters as par
 
 
 class Segment_pair:
@@ -27,12 +28,12 @@ class Segment_pair:
 
 class Surface:
 
-    def __init__(self):
+    def __init__(self, x, y):
         """
         Initializes the x and y-Values with the init_surface module
         """
-        self.xvals = np.arange(par.XMIN, par.XMAX + 1, par.DELTA_X)
-        self.yvals = init.init_surface(self.xvals)
+        self.xvals = x
+        self.yvals = y
 
     def normal_vector(self):
         """
@@ -72,6 +73,7 @@ class Surface:
         plt.title('Surface')
         plt.xlabel('x[nm]')
         plt.ylabel('y[nm]')
+        plt.show()
 
     def write(self, time, filename):
         """
@@ -216,17 +218,25 @@ class Surface:
         # print(self.xvals.reshape((self.xvals.size, 1)).shape)
         # (self.points)
         self._update_points()
-        #print('Before deloop = {}'.format(self.points))
+        print('Before deloop = {}'.format(self.points))
         self._create_matrix()
         # print('Compare Matrix shape: {}'.format(compare_matrix.shape))
         # print(compare_matrix[0,0].x11)
         # print(compare_matrix[0, 0].y11)
+        print('a = {}'.format(self.a[:self.k]))
+        print('b = {}'.format(self.b[:self.k]))
         result = np.linalg.solve(self.a[:self.k], self.b[:self.k])
-        #print('reslult shape = {}'.format(result.shape))
+        print('result  = {}'.format(result))
+        print('further_information  = {}'.format(self.further_information))
+        print('result shape = {}'.format(result.shape))
+        print('further_information shape = {}'.format(self.further_information.shape))
+        print('k = {}'.format(self.k))
         result_bool = self._intersections(result)
-        #print('The result_bool is: {}'.format(result_bool))
+        print('The result_bool is: {}'.format(result_bool))
         self._calculate_new_points(result, result_bool)
+        print('new calculated points = {}'.format(self.newpoints))
         self._flaglooppoints(result_bool)
+        print('show flaged points = {}'.format(self.points))
 
         # print('points after inserting none outside the method: {}'.format(self.points))
         self._insertintersectionpoint(result_bool)
@@ -234,4 +244,15 @@ class Surface:
         #print('number of xvals = {}'.format(self.xvals.shape))
         self._removeflaged()
         self._setvals()
-        #print('After deloop = {}'.format(self.points))
+        print('After deloop = {}'.format(self.points))
+
+surface = Surface(TestingSurfaces.x, TestingSurfaces.y)
+plt.plot(surface.xvals, surface.yvals, "x-", label=f"t = {1}")
+plt.title('Surface')
+plt.xlabel('x[nm]')
+plt.ylabel('y[nm]')
+
+surface.deloop()
+plt.plot(surface.xvals, surface.yvals, "x-", label=f"t = {1}")
+plt.show()
+

@@ -3,7 +3,16 @@ from scipy import linalg
 from time import time as t
 import TestingSurfaces
 
-
+def intersection(solution, further_information):
+    zeroes = np.zeros(solution.shape)
+    ones = np.ones(solution.shape)
+    first_row = zeroes < solution
+    print(first_row)
+    second_row = solution < ones
+    print(second_row)
+    intersection = first_row == second_row
+    result = np.logical_and(intersection[:, 0], intersection[:, 1])
+    print(result)
 class Segment_a:
     def __init__(self, p11, p12, p21, p22):
         self.x11 = p11[0]
@@ -120,19 +129,22 @@ for i, pointi in enumerate(points):
                                     pointjplusone)
                 print(element_a.a)
                 if np.linalg.det(element_a()) != 0:
-                    a_test[i, j] = element_a()
+                    a_test[i, j] = element_a
                     print(
                         'b element:{}'.format((pointj - pointi).reshape(2, 1)))
                     element_b = Segment_b(pointi, pointj)
-                    b_test[i, j] = element_b()
+                    b_test[i, j] = element_b
 
 print(a_test)
-erg = np.linalg.solve(a_test, b_test)
+#erg = np.linalg.solve(a_test, b_test)
 print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT')
-points1 = TestingSurfaces.p3
+points1 = TestingSurfaces.p
+number_of_segments = (int(points1.size / 2) - 1)
+number_of_pairs = int(number_of_segments**2/2+number_of_segments/2)
 print('number of points in the test = {}'.format(points1.shape))
-a = np.zeros(((int(points1.size / 2) - 1) ** 2, 2, 2))
-b = np.zeros(((int(points1.size / 2) - 1) ** 2, 2, 1))
+a = np.zeros((number_of_pairs, 2, 2))
+b = np.zeros((number_of_pairs, 2, 1))
+further_information = np.zeros(((int(points1.size / 2) - 1) ** 2, 2))
 print(a.shape)
 print('datatype of a1 = {}'.format(a1.dtype))
 print(b.shape)
@@ -144,13 +156,12 @@ for i, pointi in enumerate(points1):
         for j, pointj in enumerate(points1):
             if i + 1 < j and j < int(points1.size / 2) - 1:
                 print('k = {}'.format(k))
-                pointjplusone = TestingSurfaces.p3[j + 1, :]
+                pointjplusone = points1[j + 1, :]
                 element = (pointiplusone - pointi, -pointjplusone + pointj)
                 if np.linalg.det(element) != 0:
                     a[k, :, :] = element
-                    print(
-                        'b element:{}'.format((pointj - pointi).reshape(2, 1)))
                     b[k, :, :] = (pointj - pointi).reshape(2, 1)
+                    further_information[k, :] = (i, j)
                     k = k + 1
 
 # print('matrix a = {}'.format(a))
@@ -158,7 +169,8 @@ for i, pointi in enumerate(points1):
 
 # print('matrix b = {}'.format(b))
 # print(b)
-print('Solution 3d = {}'.format(np.linalg.solve(a[:k, :, :], b[:k, :, :])))
-
+solution = np.linalg.solve(a[:k], b[:k])
+print('Solution 3d = {}'.format(solution))
+intersection(solution, further_information)
 # print(a1)
 # print(b1)
