@@ -4,8 +4,13 @@ codedir = os.path.join(filedir, '..', '..', 'mini_topsim')
 sys.path.insert(0, codedir)
 
 #import pytest
-from mini_topsim.main import mini_topsim
 import mini_topsim.plot as srfplt
+from mini_topsim.surface import Surface
+from mini_topsim.main import mini_topsim
+#import mini_topsim.parameter as par causes reloading circular dependency?
+from mini_topsim.main import par 
+
+
 
 config_filename1 = None
 config_filename2 = None
@@ -35,10 +40,21 @@ if config_filename2 != None:
 srf_filename1 = 'etch_dx0_125.srf'
 srf_filename2 = 'etch_dx1.srf' #None
 
-srfplt.plot(srf_filename1, srf_filename2)
+#srfplt.plot(srf_filename1, srf_filename2)
 #srfplt.plot(srf_filename1)
 
+srfplotter = srfplt._SurfacePlotter(srf_filename1, srf_filename2)
 
+par.load_parameters('etch_dx0_125.cfg')
+srf1 = Surface()
+srf1.xvals = srfplotter.xpoints_list[-1]
+srf1.yvals = srfplotter.ypoints_list[-1]
+
+srf2 = Surface()
+srf2.xvals = srfplotter.refsrf.xpoints_list[-1]
+srf2.yvals = srfplotter.refsrf.ypoints_list[-1]
+
+print(srf1.distance(srf2))
 
 # def test_run(): 
 #     """Test running miniTopSim."""

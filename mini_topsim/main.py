@@ -57,7 +57,7 @@ def mini_topsim(config_file):
         time += dtime
 
     surface.write(time, filename)
-
+    
     if par.PLOT_SURFACE:
         plot.plot(filename)
 
