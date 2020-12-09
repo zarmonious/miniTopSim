@@ -25,8 +25,8 @@ class Sputter_yield_Yamamura():
     """
     Describes a callable object that implements the yamamura function.
     """
-    def __init__(self, Y0,f, b):
-        self.Y0 = Y0
+    def __init__(self, y0,f, b):
+        self.y0 = y0
         self.f = f
         self.b = b
     
@@ -39,11 +39,11 @@ class Sputter_yield_Yamamura():
     
         :returns: Sputter yield Y
         """
-        Y=self.Y0*costheta**(-self.f) * np.exp(self.b*(1-1/costheta))
-        
-        #removes division by 0 errors. If costheta = 0 Y should be 0
-        Y[np.isnan(Y)]=0 
-        return Y
+        y=self.y0*costheta**(-self.f) * np.exp(self.b*(1-1/costheta))
+
+        #removes division by 0 errors. If costheta = 0 -> Y should be 0
+        y[np.isnan(y)]=0 
+        return y
 
 class Sputter_yield_table():
     """
@@ -66,5 +66,5 @@ class Sputter_yield_table():
         tiltvals = data[:,0]
         yieldvals = data[:,1]
         theta = np.arccos(costheta)
-        Yfunc = interp1d(tiltvals, yieldvals)
-        return Yfunc(theta)
+        yfunc = interp1d(tiltvals, yieldvals)
+        return yfunc(theta)

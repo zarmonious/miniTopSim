@@ -24,7 +24,7 @@ if os.path.exists(filename):
 
 par.load_parameters(config_file)
 
-
+#Example Surface
 surface = Surface()
 surface.xvals=[0.,1.,2.,1.,1.5,3.,4.,5.,4.,5.,6.,7.,8.,7.,7.5,8.,9.]
 surface.yvals=[10.,10.,10.,15.,17.,18.,18.,18.,12.,13.,13.,12.,11.,10.,9.,8.,8.]

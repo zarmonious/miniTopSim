@@ -78,9 +78,8 @@ class Surface:
     
     def eliminate_overhangs(self):
         """
-        Eliminates surface overhangs iteratively
-        """
-        
+        Eliminates overhanging structures iteratively
+        """        
         #from left to right
         for index in range(0, len(self.xvals)-1):
             if (self.xvals[index] > self.xvals[index+1] and

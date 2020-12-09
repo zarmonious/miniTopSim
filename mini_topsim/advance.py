@@ -61,8 +61,8 @@ def get_velocities(ny):
     else:
         sputter.init_sputtering()
         costheta = abs(ny)
-        Y = sputter.get_sputter_yield(costheta)
-        v=(par.BEAM_CURRENT_DENSITY/sciconst.e * Y * costheta) / par.DENSITY
-        v=v*1e6
+        y = sputter.get_sputter_yield(costheta)
+        v=(par.BEAM_CURRENT_DENSITY/sciconst.e * y * costheta) / par.DENSITY
+        v=v*1e6 #converting from cm/s to nm/s
         
     return v
