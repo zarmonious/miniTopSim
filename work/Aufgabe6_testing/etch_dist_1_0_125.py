@@ -5,7 +5,6 @@ sys.path.insert(0, codedir)
 
 import mini_topsim.plot as srfplt
 from mini_topsim.surface import Surface
-import mini_topsim.parameters as par
 from mini_topsim.main import par
 
 srf_filename1 = os.path.join(filedir,'etch_dx0_125.srf')

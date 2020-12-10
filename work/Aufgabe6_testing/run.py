@@ -22,8 +22,3 @@ if not config_file.endswith('.cfg'):
 mini_topsim(config_file)
 
 
-srf_filename1 = os.path.join(filedir,'etch_dx0_125.srf_save')
-srf_filename2 = os.path.join(filedir,'etch_dx1.srf')
-srfplotter = srfplt.plot(srf_filename1, srf_filename2)
-
-
