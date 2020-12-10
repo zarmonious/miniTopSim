@@ -9,7 +9,7 @@ includes function
 import numpy as np
 import init_surface as init
 import matplotlib.pyplot as plt
-from numpy import arccos, array, dot, pi, cross
+from numpy import arccos, dot, pi, cross
 from numpy.linalg import norm
 
 import parameters as par

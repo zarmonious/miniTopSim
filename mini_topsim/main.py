@@ -17,9 +17,10 @@ from advance import advance
 from advance import timestep
 import parameters as par
 
+
 import plot
 
-def mini_topsim(config_file):
+def mini_topsim(config_file = None):
     """
     Reads the Simulation parameters, starts the sim, plots and writes to file
 
@@ -37,11 +38,15 @@ def mini_topsim(config_file):
     """
     print('Running miniTopSim ...')
 
+    if not config_file:
+        print('No config file defined. Using default...\n')
+        return 1
+        
     filename = config_file[:-4] + '.srf'
 
     if os.path.exists(filename):
         os.remove(filename)
-
+        
     par.load_parameters(config_file)
 
     tend = par.TOTAL_TIME
@@ -56,9 +61,13 @@ def mini_topsim(config_file):
         advance(surface, dtime)
         time += dtime
 
-    surface.write(time, filename)
+    surface.write(time, filename) 
     
-    if par.PLOT_SURFACE:
+    filename_save = filename + '_save'
+    
+    if os.path.exists(filename_save):
+        plot.plot(filename, filename_save)
+    elif par.PLOT_SURFACE:
         plot.plot(filename)
 
 if __name__ == '__main__':
