@@ -65,9 +65,6 @@ def mini_topsim():
         surface.write(time, filename)
         dtime = timestep(dt, time, tend)
         advance(surface, dtime)
-        #print('Start delooping')
-        surface.deloop()
-        #print('Stop delooping')
         time += dtime
 
     stop_simulation_time = currenttime()
