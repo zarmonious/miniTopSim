@@ -13,7 +13,9 @@ mini_topsim(config_file)
 
 @pytest.fixture()
 def calc_distance():
-    """tests if distance between two surfaces is below 0.5*dist_treshold"""
+    """
+    calculates distance between etch_dx1.srf and etch_dx1.srf_save  
+    """
         
     srf_filename1 = os.path.join(filedir,'etch_dx1.srf')
     srf_filename2 = os.path.join(filedir,'etch_dx1.srf_save')
@@ -31,7 +33,13 @@ def calc_distance():
     dist = srf1.distance(srf2)
 
 def test_calc_distance(calc_distance):
-    """tests if distance between two surfaces is below 0.5*dist_treshold"""
+    """
+    calculates distance between surfaces and tests it with treshold value
+    
+    calculates distance between etch_dx1.srf and etch_dx1.srf_save and
+    tests it with treshold value calculated in calc_distance
+    
+    """
   
     srf_filename1 = os.path.join(filedir,'etch_dx1.srf')
     srf_filename2 = os.path.join(filedir,'etch_dx1.srf_save')

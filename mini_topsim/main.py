@@ -2,15 +2,11 @@
 Usage: $ python3 main.py <simulation time> <timestep>
 
 includes to functions:
-"mini_topsim": reads the Simulation parameters and starts the Simulation
-"simulation": simulates the surface movement with the given parameters 
+"mini_topsim": reads the Simulation parameters and starts the Simulation 
 """
 
 import sys
 import os
-
-import matplotlib.pyplot as plt
-
 
 from surface import Surface
 from advance import advance
@@ -22,25 +18,26 @@ import plot
 
 def mini_topsim(config_file = None):
     """
-    Reads the Simulation parameters, starts the sim, plots and writes to file
+    Loads parameters from config_file, starts the sim, plots and writes to file
 
-    the first sys.argv[1] is the simulation time 
-    the second sys.argv[2] is the timestep
+    :param config_file: config_file with simulation parameters
 
-    if no sys arguments are passed the simulation starts with tend=10 and dt=1
-    creates a Surface Object and starts the simulation. 
-    the correct timestep is calculated with the timestep function 
+
+    Loads parameters from config_file.   
+    If no config_file is passed passed, None is returned.
+    Creates a Surface Object and starts the simulation. 
+    The correct timestep is calculated with the timestep function 
     from the advance module. 
-    Writes all calculated datapoints to a file with the 
-    filenname: basic_<tend>_<dt>.srf
-    plots the simulation fpr t = 0 and t = tend
+    
+    If a *.srf_save file with the same filename exists, the plot function with
+    both surfaces is called.
 
     """
     print('Running miniTopSim ...')
 
     if not config_file:
-        print('No config file defined. Using default...\n')
-        return 1
+        print('No config file defined. Exiting...')
+        return None
         
     filename = config_file[:-4] + '.srf'
 
@@ -66,9 +63,11 @@ def mini_topsim(config_file = None):
     filename_save = filename + '_save'
     
     if os.path.exists(filename_save):
+        print('*.srf_save file exists... plotting both!')
         plot.plot(filename, filename_save)
     elif par.PLOT_SURFACE:
         plot.plot(filename)
+        
 
 if __name__ == '__main__':
 

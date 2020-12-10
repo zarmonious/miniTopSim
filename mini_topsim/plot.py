@@ -52,9 +52,6 @@ Functions:
 Author: Haberl Alexander
 Part of the miniTopSim Project: https://github.com/hobler/miniTopSim
 '''
-
-
-import os
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
@@ -84,7 +81,9 @@ class _SurfacePlotter:
     surface at a specific point in time.
 
     Args:
-        filename(string): Name of the .srf file
+        filename(string, string2 = None): 
+            string ... name of the *.srf file
+            string2 ... name of the reference *.srf file to plot dashed 
 
     Attributes:
         filename(string): Name of the .srf file
@@ -250,6 +249,10 @@ class _SurfacePlotter:
     def update_plot(self):
         '''
         Updates the plot depending on the saved parameters
+        
+        If srf-object includes a reference surface with different time-steps,
+        the reference surface with the simulation time closest to the actual
+        time is plotted in dashed
         '''
         if(self.deleteplot_mode == True):
             plt.clf()
@@ -294,6 +297,13 @@ class _SurfacePlotter:
         plt.draw()
         
     def find_nearest(self, time):
+        '''
+        returns surface index of srf-object at simulation time closest to time
+        
+        :param time: simulation time value
+        
+        :return: surface index with simulation time closest to time
+        '''
         return (np.abs(np.asarray(self.time_list) - time)).argmin()
         
     def plot_interactive(self):
@@ -346,6 +356,7 @@ def plot(filename, reffilename = None):
 
     Args:
         filename(str): Name of the \'.srf\' file.
+        reffilename(str): Optional. Name of the reference \'.srf\' file.
 
     Raises:
         FileNotFoundError: if file is not found
@@ -361,7 +372,7 @@ if __name__ == '__main__':
     '''
     This module can be used as a script to plot 2D-surfaces from a \'.srf\' file
 
-        USAGE: $ python3 plot.py [filename of .srf file]
+        USAGE: $ python3 plot.py 1st.srf file 2nd.srf file
 
     If no filename is specified the default name 'trench.srf_save' will be used.
     '''
