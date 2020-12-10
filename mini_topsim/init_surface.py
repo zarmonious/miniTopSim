@@ -141,7 +141,7 @@ def _step(xvals):
     k,d = _find_linar_poly(par.FUN_XMIN, par.FUN_PEAK_TO_PEAK, par.FUN_XMAX, 0)
 
 
-    yvals[mask] = k*xvals[mask]+d
+    yvals[mask] = k*xvals[mask] + d
 
     return yvals
 
@@ -161,7 +161,7 @@ def _vshape(xvals):
 
     '''
 
-    center = par.FUN_XMIN+(par.FUN_XMAX-par.FUN_XMIN)/2
+    center = par.FUN_XMIN + (par.FUN_XMAX-par.FUN_XMIN)/2
 
     mask_left = ((xvals >= par.FUN_XMIN) & (xvals <= center))
     mask_right = ((xvals >= center) & (xvals <= par.FUN_XMAX))
@@ -173,8 +173,8 @@ def _vshape(xvals):
     k2,d2 = _find_linar_poly(center, par.FUN_PEAK_TO_PEAK, par.FUN_XMAX, 0)
 
 
-    yvals[mask_left] = k1*xvals[mask_left]+d1
-    yvals[mask_right] = k2*xvals[mask_right]+d2
+    yvals[mask_left] = k1*xvals[mask_left] + d1
+    yvals[mask_right] = k2*xvals[mask_right] + d2
     
     return yvals
 
