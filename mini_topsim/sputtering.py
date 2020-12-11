@@ -50,7 +50,12 @@ class Sputter_yield_table():
     Describes a callable object that interpolates sputter yields from a given file.
     """
     def __init__(self, filename):
-        self.filename = filename
+        filepath = os.path.join(os.path.dirname(__file__), 'tables/',filename)
+        print(filepath)
+        data = np.genfromtxt(filepath, skip_header = 1)
+        tiltvals = data[:,0]
+        yieldvals = data[:,1]
+        self.yfunc = interp1d(tiltvals, yieldvals)
 
     def __call__(self, costheta):
         """
@@ -61,10 +66,6 @@ class Sputter_yield_table():
 
         :returns: Sputter yield Y
         """
-        filepath = os.path.dirname(__file__) + "\\tables\\" + self.filename
-        data = np.genfromtxt(filepath, skip_header = 1)
-        tiltvals = data[:,0]
-        yieldvals = data[:,1]
+
         theta = np.arccos(costheta)
-        yfunc = interp1d(tiltvals, yieldvals)
-        return yfunc(theta)
+        return self.yfunc(theta)

@@ -59,10 +59,9 @@ def get_velocities(ny):
     if par.ETCHING is True:
         v = par.ETCH_RATE
     else:
-        sputter.init_sputtering()
         costheta = abs(ny)
         y = sputter.get_sputter_yield(costheta)
         v=(par.BEAM_CURRENT_DENSITY/sciconst.e * y * costheta) / par.DENSITY
-        v=v*1e6 #converting from cm/s to nm/s
+        v=v*1e7 #converting cm/s --> nm/s
         
     return v

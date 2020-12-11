@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 from surface import Surface
 from advance import advance
 from advance import timestep
+import mini_topsim.sputtering as sputter
 import parameters as par
 
 import plot
@@ -38,26 +39,25 @@ def mini_topsim():
         print("Error: No config passed.")
         sys.exit()
 
-    config_file = os.path.join(os.path.dirname(__file__), config_filename)
-
-
-    if not config_file.endswith('.cfg'):
+   
+    if not config_filename.endswith('.cfg'):
         print('Error: Incorrect config.')
         sys.exit()
 
-    filename = os.path.splitext(config_file)[0] + '.srf'
+    filename = os.path.splitext(config_filename)[0] + '.srf'
 
     if os.path.exists(filename):
         os.remove(filename)
 
 
 
-    par.load_parameters(config_file)
+    par.load_parameters(config_filename)
 
     tend = par.TOTAL_TIME
     dt = par.TIME_STEP
 
     surface = Surface()
+    sputter.init_sputtering()
     time = 0
 
     while time < tend:
