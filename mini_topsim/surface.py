@@ -7,10 +7,10 @@ includes function
 "write" which writes the surface points into a .srf file
 """
 import numpy as np
-import init_surface as init
 import matplotlib.pyplot as plt
-
+import init_surface as init
 import parameters as par
+
 
 class Surface:
 
@@ -75,3 +75,140 @@ class Surface:
                 f"surface: {time} {len(self.xvals)} x-positions y-positions\n")
             for x, y in zip(self.xvals, self.yvals):
                 f.write(f"{x} {y}\n")
+
+    def _update_points(self):
+        """updates the points of the Object for further calculations"""
+
+        self.points = np.concatenate((self.xvals.reshape((self.xvals.size, 1)),
+                                      self.yvals.reshape((self.xvals.size, 1))),
+                                     axis=1)
+
+    def _intersections(self, _results):
+        """determines if an intersection has occured and returns a bool array
+
+        :param _results: numpy array of all the results for the intersections
+        :returns _result_bool: numpy array where TRUE indicates an intersection
+        and FALSE indicates no intersection in the interested part
+        """
+        zeroes = np.zeros(_results.shape)
+        ones = np.ones(_results.shape)
+        first_column = zeroes < _results
+        #print(first_column)
+        second_column = _results < ones
+        #print(second_column)
+        intersection = first_column == second_column
+        #print(intersection)
+        _result_bool = np.logical_and(intersection[:, 0], intersection[:, 1])
+        return _result_bool
+
+    def _calculate_new_points(self, _results, _result_bool):
+        """calculates the points of intersection
+
+        :param _results: contains the results of all compared segments as numpy
+        array
+        :param _result_bool: contains the information if there was an
+        intersection or not as bool value
+        """
+        self._newpoints = np.zeros(self._further_information.shape)
+        self._newpoints[:] = np.NaN
+        for k, result in enumerate(_results):
+            if _result_bool[k]:
+                i = self._further_information[k, 0]
+                # print('i= {}'.format(i))
+                # print('point = {}'.format(self.points[i]))
+                self._newpoints[k] = self.points[i] + (self.points[i + 1] -
+                                                      self.points[i]) * result[
+                                                                             0]
+        # print('new points = {}'.format(self._newpoints))
+
+    def _setvals(self):
+        """writes the x and y yalues back"""
+        self.xvals = self.points[:, 0]
+        self.yvals = self.points[:, 1]
+
+    def _create_matrices(self):
+        """creates the two matrices a and b so that a*x=b can be solved
+
+        For each Segment Pair that has to be compared there is an entry in a and
+        b to solve the linear equation system a*x=b.
+        """
+        number_of_segments = (int(self.points.size / 2) - 1)
+        number_of_pairs = int(
+            (number_of_segments ** 2) / 2 + number_of_segments / 2)
+        self._a = np.zeros((number_of_pairs, 2, 2))
+        self._b = np.zeros((number_of_pairs, 2, 1))
+        self._further_information = np.zeros(
+            ((int(self.points.size / 2) - 1) ** 2, 2), dtype=int)
+        self._k = 0
+
+        for i, pointi in enumerate(self.points):
+            if i < number_of_segments:
+                pointiplusone = self.points[i + 1]
+                for j, pointj in enumerate(self.points):
+                    if i + 1 < j and j < number_of_segments:
+                        # print('k = {}'.format(self._k))
+                        pointjplusone = self.points[j + 1]
+                        element = np.transpose((
+                            pointiplusone - pointi, -pointjplusone + pointj))
+                        if np.linalg.det(element) != 0:
+                            self._a[self._k] = element
+                            self._b[self._k] = (pointj - pointi).reshape(2, 1)
+                            self._further_information[self._k] = (i, j)
+                            self._k = self._k + 1
+
+    def _flaglooppoints(self, _result_bool):
+        """Flags entries in self.points with None if they should be removed
+
+        If there is an intersection of two segments there is an interval of
+        points witch should be removed. Flagging them makes it possible to
+        enter the new points in the right position.
+
+        :param result_bool: contains the information if there was an
+        intersection or not as bool value
+        """
+
+        for k, intersection in enumerate(_result_bool):
+            if intersection:
+                i = self._further_information[k, 0]
+                j = self._further_information[k, 1]
+                interval = np.arange(i + 1, j + 1)
+                for point_index in interval:
+                    self.points[point_index] = np.array((None, None))
+
+    def _insertintersectionpoints(self):
+        """inserts the new points in the corresponding place"""
+
+        for k, newpoint in enumerate(self._newpoints):
+            if not np.isnan(newpoint[0]):
+                i = self._further_information[k, 0]
+                # print('k = {}'.format(k))
+                # print('i= {}'.format(i))
+                # print('newpoint = {}'.format(newpoint))
+                self.points[i + 1] = newpoint
+
+    def _removeflaged(self):
+        """removes the remaining Flaged points"""
+
+        interval = np.zeros((1, 0), dtype=int)
+        for i, point in enumerate(self.points):
+            if np.isnan(point[0]):
+                interval = np.append(interval, i)
+        self.points = np.delete(self.points, interval, axis=0)
+
+    def deloop(self):
+        """This method removes the loopes created by advancing the simulation.
+
+        When the surface is changed there is a chance that loops are created.
+        Those are detected and removed by calculating the intersection point
+        and adding it and removing the loop points. So the total number of
+        points can change.
+        """
+        self._update_points()
+        self._create_matrices()
+        _results = np.linalg.solve(self._a[:self._k], self._b[:self._k])
+        _result_bool = self._intersections(_results)
+        self._calculate_new_points(_results, _result_bool)
+        self._flaglooppoints(_result_bool)
+        self._insertintersectionpoints()
+        self._removeflaged()
+        self._setvals()

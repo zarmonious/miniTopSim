@@ -8,9 +8,9 @@ includes to functions:
 
 import sys
 import os
+from time import time as currenttime
 
 import matplotlib.pyplot as plt
-
 
 from surface import Surface
 from advance import advance
@@ -59,6 +59,7 @@ def mini_topsim():
 
     surface = Surface()
     time = 0
+    start_simulation_time = currenttime()
 
     while time < tend:
         surface.write(time, filename)
@@ -66,10 +67,18 @@ def mini_topsim():
         advance(surface, dtime)
         time += dtime
 
+    stop_simulation_time = currenttime()
+    simulation_time = stop_simulation_time - start_simulation_time
+    print('The Simulation took: {}s'.format(float(simulation_time)))
     surface.write(time, filename)
 
     if par.PLOT_SURFACE:
         plot.plot(filename)
 
 if __name__ == '__main__':
+
+
     mini_topsim()
+
+
+
