@@ -14,6 +14,7 @@ import scipy.constants as sciconst
 
 import parameters as par
 
+
 def advance(surface, dtime):
     """
     calculates the movement of the surface for a timestep dtime
@@ -27,6 +28,7 @@ def advance(surface, dtime):
 
     surface.xvals += nx*dtime*v
     surface.yvals += ny*dtime*v
+    surface.deloop()
 
 
 def timestep(dtime, time, end_time):
