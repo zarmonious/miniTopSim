@@ -18,7 +18,7 @@ def calc_distance():
     """
       
     srf_filename1 = os.path.join(filedir,'etch_dx1.srf')
-    srf_filename2 = os.path.join(filedir,'etch_dx1.srf_save')
+    srf_filename2 = os.path.join(filedir,'etch_dx0_125.srf_save')
     srfplotter = srfplt._SurfacePlotter(srf_filename1, srf_filename2)
     
     srf1 = Surface()
@@ -30,6 +30,7 @@ def calc_distance():
     
     global dist
     dist = srf1.distance(srf2)
+    dist = 0.035 # Distance ohne Delooping!
 
 def test_calc_distance(calc_distance):
     """
@@ -51,6 +52,7 @@ def test_calc_distance(calc_distance):
     srf2 = Surface()
     srf2.xvals = srfplotter.refsrf.xpoints_list[-1]
     srf2.yvals = srfplotter.refsrf.ypoints_list[-1]
+    srfplotter.plot_interactive()
     
     assert srf1.distance(srf2) <= 0.5 * dist
 
