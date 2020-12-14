@@ -1,6 +1,7 @@
 [Setup]
-ETCHING = (True, 'ETCHING',
+ETCHING = (False, None,
     '''Flag selecting the simulation mode between etching and sputtering.
+    True = Etching, False  = Sputtering
     ''')
 
 [Initial Conditions]
@@ -13,9 +14,13 @@ XMAX = (50., 'XMAX > XMIN',
 DELTA_X = (1., 'DELTA_X > 0.',
     '''Increment of x values (nm) of the initial surface.
     ''')
-INITIAL_SURFACE_TYPE = ('Cosine', 'INITIAL_SURFACE_TYPE in ("Cosine",)',
+INITIAL_SURFACE_TYPE = ('Cosine', 
+	'INITIAL_SURFACE_TYPE in ("Flat","Cosine","DoubleCosine","Step","V-Shape","File")',
     '''Initial surface type.
     ''')
+INITIAL_SURFACE_FILE = ('Cosine.srf', 'INITIAL_SURFACE_FILE.endswith(".srf")',
+	'''Read srf-file, only when INITIAL_SURFACE_TYPE ='File'
+	''')
 FUN_XMIN = (-25., 'FUN_XMIN >= XMIN',
     '''Lower boundary (nm) of initial surface function.
     For XMIN < x < FUN_XMIN the surface function is assumed to be constant
@@ -27,7 +32,7 @@ FUN_XMAX = (-25., 'FUN_XMAX <= XMAX and FUN_XMAX > FUN_XMIN',
     and equal to its value at x = FUN_XMAX.
     ''')
 FUN_PEAK_TO_PEAK = (100., None, '''Maximum deflection value of the function in
-    relation to y=0. Negative values indicate deflection in negative v-direction
+    relation to y=0. Negative values indicate deflection in negative y-direction
     .''')
 
 [Numerics]
@@ -39,11 +44,32 @@ TIME_STEP = (1., 'TIME_STEP > 0.',
 TOTAL_TIME = (float, 'TOTAL_TIME > 0.',
     '''Total beam time = total simulation time.
     ''')
+BEAM_CURRENT_DENSITY = (0.001, 'BEAM_CURRENT_DENSITY > 0',
+    '''Beam current density J = F_beam*e; F_beam = Beam flux density;
+    e = elementary charge
+    ''')
 
 [Physics]
 ETCH_RATE = (1., None,
     '''Etch rate = surface velocity (nm/s) if ETCHING==True.
     ''')
+SPUTTER_YIELD_0 = (3.25, 'SPUTTER_YIELD_0 > 0',
+    '''The Y0 parameter of the Yamamura formula to calculate the sputter yield.
+    ''')
+SPUTTER_YIELD_F = (1.41, 'SPUTTER_YIELD_F > 0',
+    '''The f parameter of the Yamamura formula to calculate the sputter yield.
+    ''')
+SPUTTER_YIELD_B = (0.17, 'SPUTTER_YIELD_B > 0',
+    '''The b parameter of the Yamamura formula to calculate the sputter yield.
+    ''')
+SPUTTER_YIELD_FILE = ('', None,
+    '''Filename of a file containing the sputter yield in relation to the angle
+    theta between the sputter beam and the surface normal. The file has to be 
+    stored in the tables subdirectory.'''
+    )
+DENSITY = (5e22, 'DENSITY > 0',
+    '''Atom density of the sputtered material in atoms/cm^3'''
+    )
 
 [Output]
 PLOT_SURFACE = (True, None,
