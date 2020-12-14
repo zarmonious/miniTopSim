@@ -3,8 +3,6 @@ Implements a function "init_surface" to initialize the Surface
 """
 
 import numpy as np
-
-
 import parameters as par
 
 
