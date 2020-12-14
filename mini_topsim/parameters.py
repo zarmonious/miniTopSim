@@ -93,8 +93,5 @@ def load_parameters(config_file_path, params_db_filename = 'parameters.db'):
 		sys.exit()
 
 	_check_conditions(conditions_dict) 
-    
-    #dir_path=os.path.dirname(os.path.realpath(config_file_path))
-    #param_dict.INITIAL_SURFACE_FILE = os.path.join(dir_path, param_dict.INITIAL_SURFACE_FILE)
 
 	return param_dict
