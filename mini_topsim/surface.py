@@ -19,12 +19,9 @@ class Surface:
         """
         Initializes the x and y-Values with the init_surface module
         """
-        if par.INITIAL_SURFACE_TYPE == 'File':
+        if par.INITIAL_SURFACE_TYPE == 'File':          
             
-            srf_file = os.path.join(os.path.dirname(__file__), 
-                                    par.INITIAL_SURFACE_FILE)
-
-            
+            srf_file = par.INITIAL_SURFACE_FILE
             self.xvals, self.yvals = init.read_srf_file(srf_file, 
                                                         par.TOTAL_TIME)
 

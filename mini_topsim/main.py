@@ -38,7 +38,7 @@ def mini_topsim():
         print("Error: No config passed.")
         sys.exit()
 
-    config_file = os.path.join(os.path.dirname(__file__), config_filename)
+    config_file=config_filename
 
 
     if not config_file.endswith('.cfg'):
