@@ -1,4 +1,4 @@
-import pytest
+#import pytest
 import os, sys
 filedir = os.path.dirname(__file__)
 codedir = os.path.join(filedir, '..', '..', 'mini_topsim')
@@ -7,9 +7,12 @@ sys.path.insert(0, codedir)
 import mini_topsim.plot as srfplt
 from mini_topsim.surface import Surface
 from mini_topsim.main import mini_topsim
+import mini_topsim.parameters as par
 
 config_file = os.path.join(filedir,'cosine_2.cfg')
+
 mini_topsim(config_file)
+
 
 
 def test_calc_distance():

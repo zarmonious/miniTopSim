@@ -57,11 +57,13 @@ def mini_topsim(config_file = None):
         os.remove(filename)
         
     par.load_parameters(config_file)
-
+    
     tend = par.TOTAL_TIME
     dt = par.TIME_STEP
 
     surface = Surface()
+    
+    
     sputter.init_sputtering()
     time = 0
     start_simulation_time = currenttime()
