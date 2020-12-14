@@ -73,19 +73,22 @@ def mini_topsim(config_file = None):
         surface.eliminate_overhangs()
         time += dtime
 
+    stop_simulation_time = currenttime()
+    simulation_time = stop_simulation_time - start_simulation_time
+    print('The Simulation took: {}s'.format(float(simulation_time)))
     surface.write(time, filename) 
     
     filename_save = filename + '_save'
     
-    if os.path.exists(filename_save):
-        print('*.srf_save file exists... plotting both!')
-        plot.plot(filename, filename_save)
-    elif par.PLOT_SURFACE:
-        plot.plot(filename)
+    if par.PLOT_SURFACE:
+        if os.path.exists(filename_save):
+            print('*.srf_save file exists... plotting both!')
+            plot.plot(filename, filename_save)
+        else:
+            plot.plot(filename)
         
 
 if __name__ == '__main__':
-
     
     mini_topsim()
 
