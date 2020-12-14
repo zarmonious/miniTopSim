@@ -9,6 +9,9 @@ includes function
 import numpy as np
 import matplotlib.pyplot as plt
 import init_surface as init
+from numpy import arccos, dot, pi, cross
+from numpy.linalg import norm
+
 import parameters as par
 
 
@@ -229,3 +232,58 @@ class Surface:
         self._insertintersectionpoints()
         self._removeflaged()
         self._setvals()
+    def distance(self, refsrf):
+        """
+        calculates the distance to a reference surface 
+                
+        :param refsrf: reference surface object
+        """
+        distances12 = np.zeros_like(self.xvals)
+        distances21 = np.zeros_like(self.xvals)
+        
+        tmp = np.zeros(len(refsrf.xvals)-1)
+        for i in range(len(self.xvals)):
+            p = [self.xvals[i], self.yvals[i]]
+            for j in range(len(refsrf.xvals)-1):
+                seg = np.asarray([[refsrf.xvals[j], refsrf.yvals[j]], 
+                       [refsrf.xvals[j+1], refsrf.yvals[j+1]]])
+                tmp[j] = point2segment_dist(p, seg)
+            distances12[i] = min((np.abs(tmp)))
+            
+        del tmp
+        tmp = np.zeros(len(self.xvals)-1)      
+        for i in range(len(refsrf.xvals)):
+            p = [refsrf.xvals[i], refsrf.yvals[i]]
+            for j in range(len(self.xvals)-1):
+                seg = np.asarray([[self.xvals[j], self.yvals[j]], 
+                       [self.xvals[j+1], self.yvals[j+1]]])
+                tmp[j] = point2segment_dist(p, seg)
+            distances21[i] = min((np.abs(tmp)))
+            
+        return (np.mean(distances12) + np.mean(distances21))/2
+            
+def point2segment_dist(p, seg):
+    """
+    calculates the distance between a point and a surface segment.
+
+    If point projects onto the line segment, the orthogonal distance
+    from the point to the line is returned.
+    If the point does not project to the line segment, the distances
+    to both segment endpoints is calculated and take the shortest 
+    distance is returned.
+
+    :param point: Numpy array p=[x,y]
+    :param line: list of segment endpoints [pstart, pend]=[[x1,y1],[x2,y2]]
+    :return: The minimum distance between point and surface segment.
+    """
+    start = seg[0]
+    end = seg[1]
+    if all(start == p) or all(end == p):
+        return 0
+    if arccos(round(dot((p - start) / norm(p - start),
+        (end - start) / norm(end - start)), 8)) > pi / 2:
+        return norm(p - start)
+    if arccos(round(dot((p - end) / norm(p - end), 
+        (start - end) / norm(start - end)), 8)) > pi / 2:
+        return norm(p - end)
+    return norm(cross(start - end, start - p))/norm(end-start)
