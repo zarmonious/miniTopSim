@@ -57,6 +57,9 @@ def mini_topsim(config_file = None):
         os.remove(filename)
         
     par.load_parameters(config_file)
+    dir_path = os.path.dirname(os.path.realpath(config_file))
+    par.INITIAL_SURFACE_FILE = os.path.join(dir_path, 
+        par.INITIAL_SURFACE_FILE)
     
     tend = par.TOTAL_TIME
     dt = par.TIME_STEP
