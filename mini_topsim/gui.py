@@ -163,7 +163,7 @@ class Gui:
             if defaulttype is int or defaulttype is float:
                 content = tk.DoubleVar()
                 entry = ttk.Spinbox(self.root,  textvariable=content,
-                            validate='focusout', from_=-100.0, to=100.0,
+                            validate='focusout', from_=-1000.0, to=1000.0,
                             validatecommand=partial(self.change_update, key))
                             
             elif defaulttype is bool:
