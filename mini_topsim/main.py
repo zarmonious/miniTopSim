@@ -32,6 +32,7 @@ def mini_topsim():
     """
     print('Running miniTopSim ...')
 
+
     if len(sys.argv) > 1:
         config_filename = sys.argv[1]
     else:
