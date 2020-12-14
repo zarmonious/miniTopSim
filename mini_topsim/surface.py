@@ -239,7 +239,7 @@ class Surface:
         :param refsrf: reference surface object
         """
         distances12 = np.zeros_like(self.xvals)
-        distances21 = np.zeros_like(self.xvals)
+        distances21 = np.zeros_like(refsrf.xvals)
         
         tmp = np.zeros(len(refsrf.xvals)-1)
         for i in range(len(self.xvals)):

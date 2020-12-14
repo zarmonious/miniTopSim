@@ -53,5 +53,5 @@ def test_calc_distance(calc_distance):
     srf2.xvals = srfplotter.refsrf.xpoints_list[-1]
     srf2.yvals = srfplotter.refsrf.ypoints_list[-1]
     
-    assert srf1.distance(srf2) <= 0.5 * dist
+    assert srf1.distance(srf2) == dist
 
