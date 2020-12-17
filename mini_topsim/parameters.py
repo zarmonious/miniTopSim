@@ -49,6 +49,7 @@ def load_parameters(config_file_path, params_db_filename = 'parameters.db'):
 	params_db_path = os.path.join(os.path.dirname(__file__), params_db_filename)
 	params = _parse_file(params_db_path)
 	config = _parse_file(config_file_path)
+    
 	param_dict = {}
 	conditions_dict = {}
 	incorrect_params = 0
@@ -91,6 +92,6 @@ def load_parameters(config_file_path, params_db_filename = 'parameters.db'):
 		print(str(incorrect_params) + " Errors were detected.")
 		sys.exit()
 
-	_check_conditions(conditions_dict)
+	_check_conditions(conditions_dict) 
 
 	return param_dict

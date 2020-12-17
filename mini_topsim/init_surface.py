@@ -231,6 +231,7 @@ def read_srf_file(filename,time):
 
     n_values = 0
 
+    print(filename)
     
     with open(filename) as file:
 
