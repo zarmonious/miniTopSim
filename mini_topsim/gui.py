@@ -405,40 +405,40 @@ class CreateConfigFile:
             return True
         
         return False
-    
-def main():
+
+def main(command_line_input):
     """
     This function calls and starts the GUI.
-    
+
     The function proves the existence of parameters.db and if the command line
     is valid.
-    If this is the case then the GUI is called. 
+    If this is the case then the GUI is called.
     """
-    
+
     current_dir = os.path.dirname(os.path.abspath(__file__))
     path_to_parameter_file = os.path.join(current_dir, 'parameters.db')
     if not os.path.exists(path_to_parameter_file):
         print('File parameters.db cannot be found in directory {}'.format(
                                                     path_to_parameter_file))
         sys.exit()
-        
+
     parent_dir = os.path.dirname(current_dir)
-    path_to_button_file = os.path.join(parent_dir, 'work', 'Aufgabe13_gui', 
+    path_to_button_file = os.path.join(parent_dir, 'work', 'Aufgabe13_gui',
                                                                    'info.png')
-    
+
     path_to_cfg_file =  os.path.join(parent_dir, 'work', 'Aufgabe13_gui')
-    
-    if len(sys.argv) == 2:
-        section_name = sys.argv[1]
-    elif len(sys.argv) > 2:
-        section_name = ' '.join(sys.argv[1:])
+
+    if len(command_line_input) == 2:
+        section_name = command_line_input[1]
+    elif len(command_line_input) > 2:
+        section_name = ' '.join(command_line_input[1:])
     else:
         print('Syntax from command line is not valid!')
         sys.exit()
-    
-    gui = Gui(section_name, path_to_parameter_file, path_to_button_file, 
+
+    gui = Gui(section_name, path_to_parameter_file, path_to_button_file,
               path_to_cfg_file)
     gui.start()
 
-if __name__ == "__main__": 
-    main()
+if __name__ == "__main__":
+    main(sys.argv)
