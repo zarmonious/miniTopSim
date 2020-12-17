@@ -341,8 +341,8 @@ class Gui:
             
             if self.data == data_file:
                 return True
-            else:
-                return False
+                
+        return False
             
     def close(self):
         """
