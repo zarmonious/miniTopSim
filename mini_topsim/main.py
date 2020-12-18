@@ -43,7 +43,8 @@ def mini_topsim(config_file = None):
         if len(sys.argv) > 1:
             config_filename = sys.argv[1]
         else:
-            config_filename = 'config1.cfg'
+            sys.exit('No Config file passed')
+            #config_filename = 'cosine.cfg'
 
         config_file = config_filename
 

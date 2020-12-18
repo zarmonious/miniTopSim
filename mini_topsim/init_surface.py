@@ -83,7 +83,7 @@ def _cosine(xvals):
     mask = ((xvals >= par.FUN_XMIN) & (xvals <= par.FUN_XMAX))
     yvals = np.zeros_like(xvals)
     
-    yvals[mask] = ((par.FUN_PEAK_TO_PEAK / 2) * (1 +
+    yvals[mask] = (-(par.FUN_PEAK_TO_PEAK / 2) * (1 +
         np.cos((2*np.pi*xvals[mask])/50))) 
     
     return yvals
@@ -106,7 +106,7 @@ def _double_cosine(xvals):
     mask = ((xvals >= par.FUN_XMIN) & (xvals <= par.FUN_XMAX))
     yvals = np.zeros_like(xvals)
     
-    yvals[mask] = ((par.FUN_PEAK_TO_PEAK / 2) * (1 +
+    yvals[mask] = (-(par.FUN_PEAK_TO_PEAK / 2) * (1 +
         np.cos(((4*np.pi*xvals[mask])+50*np.pi)/50))) 
     
     return yvals
@@ -133,10 +133,10 @@ def _step(xvals):
     mask_min = (xvals<par.FUN_XMIN)
     
     yvals = np.zeros_like(xvals)
-    yvals[mask_min] = par.FUN_PEAK_TO_PEAK
+    yvals[mask_min] = -par.FUN_PEAK_TO_PEAK
     
 
-    k,d = _find_linar_poly(par.FUN_XMIN, par.FUN_PEAK_TO_PEAK, par.FUN_XMAX, 0)
+    k,d = _find_linar_poly(par.FUN_XMIN, -par.FUN_PEAK_TO_PEAK, par.FUN_XMAX, 0)
 
 
     yvals[mask] = k*xvals[mask] + d
@@ -167,8 +167,8 @@ def _vshape(xvals):
     yvals = np.zeros_like(xvals)
     
 
-    k1,d1 = _find_linar_poly(par.FUN_XMIN, 0, center, par.FUN_PEAK_TO_PEAK)
-    k2,d2 = _find_linar_poly(center, par.FUN_PEAK_TO_PEAK, par.FUN_XMAX, 0)
+    k1,d1 = _find_linar_poly(par.FUN_XMIN, 0, center, -par.FUN_PEAK_TO_PEAK)
+    k2,d2 = _find_linar_poly(center, -par.FUN_PEAK_TO_PEAK, par.FUN_XMAX, 0)
 
 
     yvals[mask_left] = k1*xvals[mask_left] + d1
