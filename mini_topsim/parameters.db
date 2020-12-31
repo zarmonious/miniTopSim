@@ -26,7 +26,7 @@ FUN_XMIN = (-25., 'FUN_XMIN >= XMIN',
     For XMIN < x < FUN_XMIN the surface function is assumed to be constant
     and equal to its value at x = FUN_XMIN.
     ''')
-FUN_XMAX = (-25., 'FUN_XMAX <= XMAX and FUN_XMAX > FUN_XMIN',
+FUN_XMAX = (25., 'FUN_XMAX <= XMAX and FUN_XMAX > FUN_XMIN',
     '''Upper boundary (nm) of initial surface function.
     For FUN_XMAX < x < XMAX the surface function is assumed to be constant
     and equal to its value at x = FUN_XMAX.

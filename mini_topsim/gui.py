@@ -423,9 +423,7 @@ def main(command_line_input):
         sys.exit()
 
     parent_dir = os.path.dirname(current_dir)
-    path_to_button_file = os.path.join(parent_dir, 'work', 'Aufgabe13_gui',
-                                                                   'info.png')
-
+    path_to_button_file = os.path.join(current_dir, 'info.png')
     path_to_cfg_file =  os.path.join(parent_dir, 'work', 'Aufgabe13_gui')
 
     if len(command_line_input) == 2:
